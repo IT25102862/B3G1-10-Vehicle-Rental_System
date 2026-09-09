@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Vehicles - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Vehicle Fleet</h1>
+        <a class="btn" th:href="@{/vehicles/add}">+ Add Vehicle</a>
+        <table>
+            <tr><th>ID</th><th>Reg No</th><th>Brand/Model</th><th>Category</th><th>Status</th><th>Actions</th></tr>
+            <tr th:each="v : ${vehicles}">
+                <td th:text="${v.vehicleId}"></td>
+                <td th:text="${v.registrationNo}"></td>
+                <td th:text="${v.brand + ' ' + v.model}"></td>
+                <td th:text="${v.category?.categoryName}"></td>
+                <td><span class="status-badge" th:classappend="'status-' + ${v.availabilityStatus}" th:text="${v.availabilityStatus}"></span></td>
+                <td>
+                    <a class="btn btn-small" th:href="@{/vehicles/edit/{id}(id=${v.vehicleId})}">Edit</a>
+                    <a class="btn btn-small btn-danger" th:href="@{/vehicles/delete/{id}(id=${v.vehicleId})}"
+                       onclick="return confirm('Delete this vehicle?');">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

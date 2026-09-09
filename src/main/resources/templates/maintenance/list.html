@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Maintenance - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Maintenance Records</h1>
+        <a class="btn" th:href="@{/maintenance/add}">+ Schedule Maintenance</a>
+        <table>
+            <tr><th>ID</th><th>Vehicle</th><th>Type</th><th>Scheduled Date</th><th>Status</th><th>Actions</th></tr>
+            <tr th:each="m : ${records}">
+                <td th:text="${m.maintenanceId}"></td>
+                <td th:text="${m.vehicle?.registrationNo}"></td>
+                <td th:text="${m.maintenanceType}"></td>
+                <td th:text="${m.scheduledDate}"></td>
+                <td><span class="status-badge" th:classappend="'status-' + ${m.status}" th:text="${m.status}"></span></td>
+                <td>
+                    <a class="btn btn-small" th:href="@{/maintenance/inservice/{id}(id=${m.maintenanceId})}"
+                       th:if="${m.status.name() == 'SCHEDULED'}">Start Service</a>
+                    <a class="btn btn-small" th:href="@{/maintenance/complete/{id}(id=${m.maintenanceId})}"
+                       th:if="${m.status.name() != 'COMPLETED'}">Complete</a>
+                    <a class="btn btn-small btn-danger" th:href="@{/maintenance/cancel/{id}(id=${m.maintenanceId})}">Cancel</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

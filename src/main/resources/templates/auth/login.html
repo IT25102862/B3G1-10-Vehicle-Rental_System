@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Login - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="auth-box card">
+    <h2>Login</h2>
+    <p th:if="${param.registered}" class="success">Registration successful. Please log in.</p>
+    <p th:if="${error}" class="error" th:text="${error}"></p>
+    <form th:action="@{/login}" method="post">
+        <label>Email</label>
+        <input type="email" name="email" required>
+        <label>Password</label>
+        <input type="password" name="password" required>
+        <button type="submit" class="btn">Login</button>
+    </form>
+    <p style="margin-top:14px;">No account? <a th:href="@{/register}">Register here</a></p>
+</div>
+</body>
+</html>

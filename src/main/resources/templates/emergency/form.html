@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Report Emergency - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Report an Emergency</h1>
+        <form th:action="@{/emergencies/save}" th:object="${request}" method="post">
+            <label>Emergency Type</label>
+            <select th:field="*{emergencyType}">
+                <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+            </select>
+            <label>Location</label>
+            <input type="text" th:field="*{location}" required>
+            <label>Description</label>
+            <textarea th:field="*{description}" rows="4"></textarea>
+            <button type="submit" class="btn">Submit Request</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Vehicle Form - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1 th:text="${vehicle.vehicleId} ? 'Edit Vehicle' : 'Add Vehicle'">Vehicle Form</h1>
+        <form th:action="@{/vehicles/save}" th:object="${vehicle}" method="post">
+            <input type="hidden" th:field="*{vehicleId}">
+            <label>Registration No</label>
+            <input type="text" th:field="*{registrationNo}" required>
+            <label>Brand</label>
+            <input type="text" th:field="*{brand}" required>
+            <label>Model</label>
+            <input type="text" th:field="*{model}" required>
+            <label>Year</label>
+            <input type="number" th:field="*{year}">
+            <label>Mileage (km)</label>
+            <input type="number" step="0.1" th:field="*{mileage}">
+            <label>Category</label>
+            <select th:field="*{category}">
+                <option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName + ' (Rs.' + c.baseRate + '/day)'}"></option>
+            </select>
+            <label>Availability Status</label>
+            <select th:field="*{availabilityStatus}">
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+            </select>
+            <button type="submit" class="btn">Save Vehicle</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

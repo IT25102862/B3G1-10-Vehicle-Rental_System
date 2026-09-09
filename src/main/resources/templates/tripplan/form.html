@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Plan a Trip - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Plan a New Trip</h1>
+        <form th:action="@{/tripplans/save}" th:object="${tripPlan}" method="post">
+            <label>Trip Name</label>
+            <input type="text" th:field="*{tripName}" required>
+            <label>Start Location</label>
+            <input type="text" th:field="*{startLocation}" required>
+            <label>Destination</label>
+            <input type="text" th:field="*{destination}" required>
+            <label>Start Date</label>
+            <input type="date" th:field="*{startDate}">
+            <label>End Date</label>
+            <input type="date" th:field="*{endDate}">
+            <label>Passenger Count</label>
+            <input type="number" th:field="*{passengerCount}" min="1" value="1">
+            <label>Estimated Distance (km)</label>
+            <input type="number" step="0.1" th:field="*{distanceKm}">
+            <button type="submit" class="btn">Save Trip Plan</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

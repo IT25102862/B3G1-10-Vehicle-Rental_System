@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Bookings - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Bookings &amp; Reservations</h1>
+        <a class="btn" th:href="@{/reservations/add}">+ New Booking</a>
+        <table>
+            <tr><th>ID</th><th>Customer</th><th>Vehicle</th><th>Start</th><th>End</th><th>Total</th><th>Status</th><th>Actions</th></tr>
+            <tr th:each="r : ${reservations}">
+                <td th:text="${r.reservationId}"></td>
+                <td th:text="${r.customer?.fullName}"></td>
+                <td th:text="${r.vehicle?.brand + ' ' + r.vehicle?.model}"></td>
+                <td th:text="${r.startDate}"></td>
+                <td th:text="${r.endDate}"></td>
+                <td th:text="'Rs. ' + ${r.totalAmount}"></td>
+                <td><span class="status-badge" th:classappend="'status-' + ${r.status}" th:text="${r.status}"></span></td>
+                <td>
+                    <a class="btn btn-small" th:href="@{/reservations/confirm/{id}(id=${r.reservationId})}"
+                       th:if="${r.status.name() == 'PENDING_APPROVAL'}">Confirm</a>
+                    <a class="btn btn-small btn-danger" th:href="@{/reservations/cancel/{id}(id=${r.reservationId})}">Cancel</a>
+                    <form th:action="@{/reservations/pay/{id}(id=${r.reservationId})}" method="post" style="display:inline">
+                        <input type="hidden" name="method" value="Card">
+                        <button type="submit" class="btn btn-small">Pay</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Vehicle Returns - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Vehicle Handover, Return &amp; Damage Assessment</h1>
+        <a class="btn" th:href="@{/returns/add}">+ Record Return</a>
+        <table>
+            <tr><th>ID</th><th>Reservation</th><th>Return Date</th><th>Mileage</th><th>Condition</th><th>Actions</th></tr>
+            <tr th:each="r : ${returns}">
+                <td th:text="${r.returnId}"></td>
+                <td th:text="${r.reservation?.reservationId}"></td>
+                <td th:text="${r.returnDate}"></td>
+                <td th:text="${r.returnMileage}"></td>
+                <td th:text="${r.returnCondition}"></td>
+                <td><a class="btn btn-small" th:href="@{/returns/{id}/assess(id=${r.returnId})}">Assess Damage</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

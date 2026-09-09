@@ -1,0 +1,65 @@
+/* Minimal, clean styling shared across every page - kept simple so it is
+   easy to explain and easy to tweak for each member's module pages. */
+* { box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f8;
+  color: #222;
+}
+.navbar {
+  background: #1e3a5f;
+  padding: 14px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar .brand { color: #fff; font-weight: bold; text-decoration: none; font-size: 18px; }
+.navbar .nav-links a {
+  color: #cfe3ff;
+  margin-left: 18px;
+  text-decoration: none;
+  font-size: 14px;
+}
+.navbar .nav-links a:hover { color: #fff; }
+.navbar .logout { color: #ffb3b3 !important; }
+
+.container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 25px 30px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+h1, h2 { color: #1e3a5f; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e2e6ea; font-size: 14px; }
+th { background: #eef2f7; color: #1e3a5f; }
+
+form label { display: block; margin-top: 12px; font-weight: 600; font-size: 14px; }
+form input, form select, form textarea {
+  width: 100%; padding: 9px; margin-top: 4px; border: 1px solid #ccd3da; border-radius: 5px; font-size: 14px;
+}
+.btn {
+  display: inline-block; background: #1e3a5f; color: #fff; padding: 9px 18px;
+  border: none; border-radius: 5px; text-decoration: none; font-size: 14px; cursor: pointer; margin-top: 16px;
+}
+.btn:hover { background: #16273f; }
+.btn-danger { background: #b03a3a; }
+.btn-small { padding: 4px 10px; font-size: 12px; margin: 0 3px; }
+
+.error { background: #fdecea; color: #b03a3a; padding: 10px 14px; border-radius: 5px; margin-bottom: 10px; }
+.success { background: #e8f7ee; color: #22733f; padding: 10px 14px; border-radius: 5px; margin-bottom: 10px; }
+
+.status-badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; color: #fff; }
+.status-AVAILABLE, .status-CONFIRMED, .status-COMPLETED, .status-RESOLVED { background: #2e9e5b; }
+.status-RENTED, .status-PENDING_APPROVAL, .status-SCHEDULED, .status-OPEN { background: #d69526; }
+.status-UNDER_MAINTENANCE, .status-CANCELLED { background: #b03a3a; }
+
+.auth-box { max-width: 400px; margin: 60px auto; }
+.landing { text-align: center; padding: 80px 20px; }
+.landing h1 { font-size: 34px; }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Emergency Requests - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Emergency &amp; Roadside Assistance</h1>
+        <a class="btn" th:href="@{/emergencies/add}">+ Report Emergency</a>
+        <table>
+            <tr><th>ID</th><th>Customer</th><th>Type</th><th>Location</th><th>Status</th><th>Actions</th></tr>
+            <tr th:each="e : ${requests}">
+                <td th:text="${e.emergencyRequestId}"></td>
+                <td th:text="${e.customer?.fullName}"></td>
+                <td th:text="${e.emergencyType}"></td>
+                <td th:text="${e.location}"></td>
+                <td><span class="status-badge" th:classappend="'status-' + ${e.status}" th:text="${e.status}"></span></td>
+                <td>
+                    <form th:action="@{/emergencies/resolve/{id}(id=${e.emergencyRequestId})}" method="get" style="display:inline">
+                        <input type="hidden" name="resolution" value="Assistance provided on site">
+                        <button type="submit" class="btn btn-small">Resolve</button>
+                    </form>
+                    <a class="btn btn-small btn-danger" th:href="@{/emergencies/cancel/{id}(id=${e.emergencyRequestId})}">Cancel</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

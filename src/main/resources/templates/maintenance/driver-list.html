@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Driver Allocation - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Driver Allocation</h1>
+        <a class="btn" th:href="@{/drivers/add}">+ Assign Driver</a>
+        <table>
+            <tr><th>ID</th><th>Reservation</th><th>Driver</th><th>Assigned Date</th><th>Status</th><th>Actions</th></tr>
+            <tr th:each="a : ${assignments}">
+                <td th:text="${a.assignmentId}"></td>
+                <td th:text="${a.reservation?.reservationId}"></td>
+                <td th:text="${a.driver?.name}"></td>
+                <td th:text="${a.assignedDate}"></td>
+                <td><span class="status-badge" th:classappend="'status-' + ${a.status}" th:text="${a.status}"></span></td>
+                <td>
+                    <a class="btn btn-small" th:href="@{/drivers/complete/{id}(id=${a.assignmentId})}"
+                       th:if="${a.status.name() != 'COMPLETED'}">Complete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

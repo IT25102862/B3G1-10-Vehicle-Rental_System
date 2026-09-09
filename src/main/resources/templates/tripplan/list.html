@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Trip Plans - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Trip Plans</h1>
+        <a class="btn" th:href="@{/tripplans/add}">+ Plan a Trip</a>
+        <table>
+            <tr><th>ID</th><th>Trip Name</th><th>From</th><th>To</th><th>Passengers</th><th>Est. Fuel Cost</th><th>Actions</th></tr>
+            <tr th:each="t : ${tripPlans}">
+                <td th:text="${t.tripPlanId}"></td>
+                <td th:text="${t.tripName}"></td>
+                <td th:text="${t.startLocation}"></td>
+                <td th:text="${t.destination}"></td>
+                <td th:text="${t.passengerCount}"></td>
+                <td th:text="'Rs. ' + ${t.estimatedFuelCost}"></td>
+                <td><a class="btn btn-small" th:href="@{/tripplans/{id}/recommendations(id=${t.tripPlanId})}">Get Recommendations</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

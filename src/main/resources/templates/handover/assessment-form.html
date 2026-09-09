@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Damage Assessment - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Damage Assessment - Return #<span th:text="${vehicleReturn.returnId}"></span></h1>
+        <form th:action="@{/returns/assess/save}" th:object="${assessment}" method="post">
+            <input type="hidden" name="vehicleReturn" th:value="${vehicleReturn.returnId}">
+            <label>Assessment Date</label>
+            <input type="date" th:field="*{assessmentDate}" required>
+            <label>Overall Condition</label>
+            <input type="text" th:field="*{overallCondition}" placeholder="Good / Fair / Poor">
+            <label>Estimated Repair Cost (Rs.)</label>
+            <input type="number" step="0.01" th:field="*{estimatedRepairCost}">
+            <label>Assessor Remark</label>
+            <textarea th:field="*{assessorRemark}" rows="3"></textarea>
+            <button type="submit" class="btn">Save Assessment</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
 package com.sliit.vrs.entity;
 
-public class Reservation {
+public class Reservation {.
 }

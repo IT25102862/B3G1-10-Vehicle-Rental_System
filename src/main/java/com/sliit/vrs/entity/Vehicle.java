@@ -28,6 +28,13 @@ public class Vehicle {
     private Integer year;
     private Double mileage;
 
+    private Double fuelConsumption;
+
+    private Integer passengerCount;
+
+    @Enumerated(EnumType.STRING)
+    private FuelType fuelType;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AvailabilityStatus availabilityStatus;

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Fuel Prices</title>
+</head>
+
+<body>
+
+<h1>Fuel Prices</h1>
+
+<a th:href="@{/fuel/new}">Add New Fuel Price</a>
+
+<br><br>
+
+<table border="1">
+
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Fuel Type</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr th:each="fuel : ${fuelPrices}">
+
+        <td th:text="${fuel.fuelPriceId}"></td>
+
+        <td th:text="${fuel.fuelType}"></td>
+
+        <td th:text="${fuel.price}"></td>
+
+        <td>
+            <a th:href="@{/fuel/edit/{id}(id=${fuel.fuelPriceId})}">
+                Edit
+            </a>
+
+            |
+
+            <a th:href="@{/fuel/delete/{id}(id=${fuel.fuelPriceId})}">
+                Delete
+            </a>
+        </td>
+
+    </tr>
+
+    </tbody>
+
+</table>
+
+</body>
+
+</html>

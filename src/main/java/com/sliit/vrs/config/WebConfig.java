@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                 // Pages that DO need login protection
                 .addPathPatterns("/dashboard/**", "/vehicles/**", "/reservations/**",
                         "/emergencies/**", "/returns/**", "/tripplans/**", "/maintenance/**",
-                        "/drivers/**")
+                        "/drivers/**", "/fuel/**")
                 // Public pages stay open
                 .excludePathPatterns("/", "/login", "/register", "/css/**", "/js/**");
     }

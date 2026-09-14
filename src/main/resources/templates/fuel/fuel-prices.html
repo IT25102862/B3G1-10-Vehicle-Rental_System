@@ -2,56 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Fuel Prices</title>
+    <meta charset="UTF-8">
+    <title>Fuel Prices - VRS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
 
-<h1>Fuel Prices</h1>
+<div th:replace="~{common/navbar :: navbar}"></div>
 
-<a th:href="@{/fuel/new}">Add New Fuel Price</a>
+<div class="container">
 
-<br><br>
+    <div class="card">
 
-<table border="1">
+        <h1>Fuel Prices</h1>
 
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Fuel Type</th>
-        <th>Price</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
+        <a class="btn" th:href="@{/fuel/new}">
+            + Add Fuel Price
+        </a>
 
-    <tbody>
+        <table>
 
-    <tr th:each="fuel : ${fuelPrices}">
+            <tr>
+                <th>ID</th>
+                <th>Fuel Type</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
 
-        <td th:text="${fuel.fuelPriceId}"></td>
+            <tr th:each="fuel : ${fuelPrices}">
 
-        <td th:text="${fuel.fuelType}"></td>
+                <td th:text="${fuel.fuelPriceId}"></td>
 
-        <td th:text="${fuel.price}"></td>
+                <td th:text="${fuel.fuelType}"></td>
 
-        <td>
-            <a th:href="@{/fuel/edit/{id}(id=${fuel.fuelPriceId})}">
-                Edit
-            </a>
+                <td th:text="${fuel.price}"></td>
 
-            |
+                <td>
 
-            <a th:href="@{/fuel/delete/{id}(id=${fuel.fuelPriceId})}">
-                Delete
-            </a>
-        </td>
+                    <a class="btn btn-small"
+                       th:href="@{/fuel/edit/{id}(id=${fuel.fuelPriceId})}">
+                        Edit
+                    </a>
 
-    </tr>
+                    <a class="btn btn-small btn-danger"
+                       th:href="@{/fuel/delete/{id}(id=${fuel.fuelPriceId})}"
+                       onclick="return confirm('Delete this fuel price?');">
+                        Delete
+                    </a>
 
-    </tbody>
+                </td>
 
-</table>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
 
 </body>
-
 </html>

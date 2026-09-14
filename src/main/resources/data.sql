@@ -11,11 +11,11 @@ INSERT INTO vehicle_categories (category_name, description, seating_capacity, ba
 ('Van', 'Large van for groups/cargo', 12, 12000),
 ('Motorcycle', 'Two-wheeler for solo trips', 1, 2000);
 
-INSERT INTO vehicles (registration_no, brand, model, year, mileage, availability_status, category_id) VALUES
-('WP-CAB-1234', 'Toyota', 'Corolla', 2022, 15000, 'AVAILABLE', 1),
-('WP-CAJ-5678', 'Honda', 'CR-V', 2021, 22000, 'AVAILABLE', 2),
-('WP-KL-9012', 'Toyota', 'HiAce', 2020, 40000, 'AVAILABLE', 3),
-('WP-BC-3456', 'Bajaj', 'Pulsar', 2023, 5000, 'AVAILABLE', 4);
+INSERT INTO vehicles (registration_no, brand, model, year, mileage, availability_status, category_id, fuel_consumption, fuel_type) VALUES
+('WP-CAB-1234', 'Toyota', 'Corolla', 2022, 15000, 'AVAILABLE', 1, 15.5, 'PETROL'),
+('WP-CAJ-5678', 'Honda', 'CR-V', 2021, 22000, 'AVAILABLE', 2, 20.5, 'PETROL'),
+('WP-KL-9012', 'Toyota', 'HiAce', 2020, 40000, 'AVAILABLE', 3, 14.5, 'DIESEL'),
+('WP-BC-3456', 'Bajaj', 'Pulsar', 2023, 5000, 'AVAILABLE', 4, 50.0, 'PETROL');
 
 INSERT INTO employees (name, phone_no, email, position, role, driver_status) VALUES
 ('Nimal Perera', '0711234567', 'nimal.driver@vrs.lk', 'Senior Driver', 'DRIVER', 'AVAILABLE'),

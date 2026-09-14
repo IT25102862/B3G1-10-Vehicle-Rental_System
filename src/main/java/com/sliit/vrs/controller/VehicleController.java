@@ -1,5 +1,6 @@
 package com.sliit.vrs.controller;
 
+import com.sliit.vrs.entity.FuelType;
 import com.sliit.vrs.entity.Vehicle;
 import com.sliit.vrs.service.VehicleCategoryService;
 import com.sliit.vrs.service.VehicleService;
@@ -36,6 +37,7 @@ public class VehicleController {
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("statuses", Vehicle.AvailabilityStatus.values());
+        model.addAttribute("fuelTypes", FuelType.values());
         return "vehicle/form";
     }
 
@@ -52,6 +54,7 @@ public class VehicleController {
         model.addAttribute("vehicle", vehicleService.getVehicleById(id));
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("statuses", Vehicle.AvailabilityStatus.values());
+        model.addAttribute("fuelTypes", FuelType.values());
         return "vehicle/form";
     }
 

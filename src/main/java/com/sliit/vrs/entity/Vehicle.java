@@ -30,8 +30,6 @@ public class Vehicle {
 
     private Double fuelConsumption;
 
-    private Integer passengerCount;
-
     @Enumerated(EnumType.STRING)
     private FuelType fuelType;
 

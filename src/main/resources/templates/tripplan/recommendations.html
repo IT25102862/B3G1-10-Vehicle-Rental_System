@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Recommendations - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Recommended Vehicles for "<span th:text="${tripPlan.tripName}"></span>"</h1>
+        <p th:text="${tripPlan.startLocation} + ' &rarr; ' + ${tripPlan.destination} + ' (' + ${tripPlan.passengerCount} + ' passengers)'"></p>
+        <table>
+            <tr><th>Vehicle</th><th>Suitability Score</th><th>Reason</th><th>Est. Fuel Cost</th></tr>
+            <tr th:each="rec : ${recommendations}">
+                <td th:text="${rec.vehicle.brand + ' ' + rec.vehicle.model}"></td>
+                <td th:text="${rec.suitabilityScore} + ' / 100'"></td>
+                <td th:text="${rec.reason}"></td>
+                <td th:text="'Rs. ' + ${rec.estimatedFuelCost}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(recommendations)}">
+                <td colspan="4">No suitable vehicles found for this trip right now.</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

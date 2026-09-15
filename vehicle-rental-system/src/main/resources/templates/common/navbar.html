@@ -1,0 +1,20 @@
+<!-- Reusable navbar fragment. Included into every protected page with:
+     <div th:replace="~{common/navbar :: navbar}"></div>
+     This avoids copy-pasting the same HTML on every page. -->
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar" class="navbar">
+    <a th:href="@{/dashboard}" class="brand">VRS - Vehicle Rental System</a>
+    <div class="nav-links">
+        <a th:href="@{/vehicles}">Fleet</a>
+        <a th:href="@{/reservations}">Bookings</a>
+        <a th:href="@{/emergencies}">Emergency</a>
+        <a th:href="@{/returns}">Returns</a>
+        <a th:href="@{/tripplans}">Trip Planner</a>
+        <a th:href="@{/maintenance}">Maintenance</a>
+        <a th:href="@{/drivers}">Drivers</a>
+        <a th:href="@{/logout}" class="logout">Logout</a>
+    </div>
+</nav>
+</body>
+</html>

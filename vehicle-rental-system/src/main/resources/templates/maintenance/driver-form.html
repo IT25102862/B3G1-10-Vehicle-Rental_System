@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Assign Driver - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Assign a Driver</h1>
+        <form th:action="@{/drivers/save}" th:object="${assignment}" method="post">
+            <label>Reservation</label>
+            <select th:field="*{reservation}" required>
+                <option th:each="r : ${reservations}" th:value="${r.reservationId}"
+                        th:text="'#' + ${r.reservationId} + ' - ' + ${r.vehicle?.registrationNo}"></option>
+            </select>
+            <label>Driver</label>
+            <select th:field="*{driver}" required>
+                <option th:each="d : ${drivers}" th:value="${d.employeeId}" th:text="${d.name}"></option>
+            </select>
+            <button type="submit" class="btn">Assign Driver</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

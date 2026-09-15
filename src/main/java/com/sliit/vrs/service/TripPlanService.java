@@ -37,11 +37,6 @@ public class TripPlanService {
     }
 
     public TripPlan createTripPlan(TripPlan tripPlan) {
-        // simple fuel cost estimate: distance(km) / 12 km-per-litre * price-per-litre(370)
-        if (tripPlan.getDistanceKm() != null) {
-            double litres = tripPlan.getDistanceKm() / 12.0;
-            tripPlan.setEstimatedFuelCost(litres * 370.0);
-        }
         return tripPlanRepository.save(tripPlan);
     }
 
@@ -66,7 +61,7 @@ public class TripPlanService {
             rec.setVehicle(v);
             rec.setSuitabilityScore(score);
             rec.setReason(seats + "-seat " + v.getCategory().getCategoryName() + " fits " + passengers + " passenger(s)");
-            rec.setEstimatedFuelCost(tripPlan.getEstimatedFuelCost());
+//            rec.setEstimatedFuelCost(tripPlan.getEstimatedFuelCost());
 
             results.add(recommendationRepository.save(rec));
         }

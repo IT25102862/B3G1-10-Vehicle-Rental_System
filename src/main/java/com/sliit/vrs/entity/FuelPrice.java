@@ -19,6 +19,7 @@ public class FuelPrice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fuelPriceId;
 
+    @Column(unique = true, nullable = false)
     @Enumerated(EnumType.STRING)
     private FuelType fuelType;
 

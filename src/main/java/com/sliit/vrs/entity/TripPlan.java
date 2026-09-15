@@ -31,5 +31,4 @@ public class TripPlan {
     private LocalDate endDate;
     private Integer passengerCount;
     private Double distanceKm;
-    private Double estimatedFuelCost;
 }

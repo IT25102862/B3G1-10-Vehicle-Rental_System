@@ -30,9 +30,14 @@ public class FuelPriceController {
 
     // Create
     @PostMapping("/save")
-    public String saveFuelPrice(@ModelAttribute FuelPrice fuelPrice) {
-        fuelPriceService.saveFuelPrice(fuelPrice);
-        return "redirect:/fuel";
+    public String saveFuelPrice(@ModelAttribute FuelPrice fuelPrice, Model model) {
+        try {
+            fuelPriceService.saveFuelPrice(fuelPrice);
+            return "redirect:/fuel";
+        } catch (RuntimeException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "fuel/fuel-form";
+        }
     }
 
     // Get one by ID
@@ -63,11 +68,16 @@ public class FuelPriceController {
     @PostMapping("/update/{id}")
     public String updateFuelPrice(
             @PathVariable Long id,
-            @ModelAttribute FuelPrice fuelPrice) {
+            @ModelAttribute FuelPrice fuelPrice, Model model) {
 
-        fuelPriceService.updateFuelPrice(id, fuelPrice);
-
-        return "redirect:/fuel";
+        try {
+            fuelPriceService.updateFuelPrice(id, fuelPrice);
+            return "redirect:/fuel";
+        } catch (RuntimeException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            fuelPrice.setFuelPriceId(id);
+            return "fuel/fuel-form";
+        }
     }
 
     // Delete

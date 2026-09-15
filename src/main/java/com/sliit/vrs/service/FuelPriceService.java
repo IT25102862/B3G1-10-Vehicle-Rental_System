@@ -1,6 +1,7 @@
 package com.sliit.vrs.service;
 
 import com.sliit.vrs.entity.FuelPrice;
+import com.sliit.vrs.entity.FuelType;
 import com.sliit.vrs.repository.FuelPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,14 @@ public class FuelPriceService {
 
     // Create
     public FuelPrice saveFuelPrice(FuelPrice fuelPrice) {
+        if (existFuelPriceByType(fuelPrice.getFuelType())) {
+            throw new RuntimeException("Fuel Type Already Exist");
+        }
         return fuelPriceRepository.save(fuelPrice);
+    }
+
+    private boolean existFuelPriceByType(FuelType fuelType) {
+        return fuelPriceRepository.existsFuelPriceByFuelType(fuelType);
     }
 
     // Get all
@@ -33,6 +41,11 @@ public class FuelPriceService {
 
         FuelPrice existingFuelPrice = fuelPriceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fuel price not found"));
+
+        if (fuelPriceRepository.existsByFuelTypeAndFuelPriceIdNot(
+                fuelPrice.getFuelType(), id)) {
+            throw new RuntimeException("Fuel Type Already Exist");
+        }
 
         existingFuelPrice.setFuelType(fuelPrice.getFuelType());
         existingFuelPrice.setPrice(fuelPrice.getPrice());

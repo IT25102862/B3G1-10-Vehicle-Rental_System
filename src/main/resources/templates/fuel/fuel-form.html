@@ -19,6 +19,12 @@
             Fuel Price
         </h1>
 
+        <!-- Error Message -->
+        <div th:if="${errorMessage}"
+             class="error-message"
+             th:text="${errorMessage}">
+        </div>
+
         <form th:action="${fuelPrice.fuelPriceId == null} ? @{/fuel/save} : @{/fuel/update/{id}(id=${fuelPrice.fuelPriceId})}"
               th:object="${fuelPrice}"
               method="post">

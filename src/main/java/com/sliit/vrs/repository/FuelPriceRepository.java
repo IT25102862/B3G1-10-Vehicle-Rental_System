@@ -11,4 +11,6 @@ public interface FuelPriceRepository extends JpaRepository<FuelPrice, Long> {
             FuelType fuelType,
             Long fuelPriceId
     );
+
+    FuelPrice getFuelPriceByFuelType(FuelType fuelType);
 }

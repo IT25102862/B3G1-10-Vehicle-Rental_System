@@ -27,6 +27,9 @@ public class TripPlanService {
     @Autowired
     private VehicleService vehicleService;
 
+    @Autowired
+    private FuelPriceService fuelPriceService;
+
     public List<TripPlan> getAllTripPlans() {
         return tripPlanRepository.findAll();
     }
@@ -56,12 +59,20 @@ public class TripPlanService {
             double score = 100.0 - ((seats - passengers) * 5.0);
             if (score < 0) score = 0;
 
+            double fuelPrice = fuelPriceService.getFuelPriceByType(v.getFuelType());
+
+            double estimatedFuelCost =
+                    Math.round(
+                            (tripPlan.getDistanceKm() / v.getFuelConsumption()) * fuelPrice * 100.0
+                    ) / 100.0;
+
+
             VehicleRecommendation rec = new VehicleRecommendation();
             rec.setTripPlan(tripPlan);
             rec.setVehicle(v);
             rec.setSuitabilityScore(score);
             rec.setReason(seats + "-seat " + v.getCategory().getCategoryName() + " fits " + passengers + " passenger(s)");
-//            rec.setEstimatedFuelCost(tripPlan.getEstimatedFuelCost());
+            rec.setEstimatedFuelCost(estimatedFuelCost);
 
             results.add(recommendationRepository.save(rec));
         }

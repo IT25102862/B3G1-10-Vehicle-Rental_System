@@ -57,4 +57,10 @@ public class FuelPriceService {
     public void deleteFuelPrice(Long id) {
         fuelPriceRepository.deleteById(id);
     }
+
+    public double getFuelPriceByType(FuelType fuelType) {
+        FuelPrice fuelPrice = fuelPriceRepository.getFuelPriceByFuelType(fuelType);
+        return fuelPrice.getPrice();
+    }
+
 }

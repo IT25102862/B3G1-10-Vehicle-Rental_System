@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${vehicle.brand + ' ' + vehicle.model + ' - DriveEasy Rentals'}">Vehicle Detail</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+
+<div class="container mt-3">
+    <p><a th:href="@{/catalog}">&larr; Back to Browse</a></p>
+
+    <div class="detail-hero">
+        <div>
+            <img th:src="${vehicle.imageUrl != null} ? @{${vehicle.imageUrl}} : 'https://placehold.co/700x400?text=' + ${vehicle.brand}" alt="Vehicle photo">
+
+            <span class="category-tag mt-2" th:text="${vehicle.category?.categoryName}">Category</span>
+            <h1 th:text="${vehicle.brand + ' ' + vehicle.model}">Brand Model</h1>
+            <p th:if="${vehicle.description}" th:text="${vehicle.description}">Description</p>
+            <p th:unless="${vehicle.description}">A well-maintained, reliable vehicle ready for your next trip.</p>
+
+            <div class="spec-list">
+                <div class="spec-item"><b th:text="${vehicle.year ?: '-'}">Year</b>Year</div>
+                <div class="spec-item"><b th:text="${vehicle.seats ?: '-'}">Seats</b>Seating Capacity</div>
+                <div class="spec-item"><b th:text="${vehicle.transmission ?: '-'}">Transmission</b>Transmission</div>
+                <div class="spec-item"><b th:text="${vehicle.fuelType ?: '-'}">Fuel</b>Fuel Type</div>
+                <div class="spec-item"><b th:text="${vehicle.color ?: '-'}">Color</b>Color</div>
+                <div class="spec-item"><b th:text="${vehicle.location ?: '-'}">Location</b>Pickup Location</div>
+            </div>
+        </div>
+
+        <div class="booking-box">
+            <div class="price mb-2" style="font-size:26px;">
+                Rs. <span th:text="${vehicle.category != null ? #numbers.formatDecimal(vehicle.category.baseRate,0,'COMMA',0,'POINT') : '-'}">0</span>
+                <span style="font-size:13px;font-weight:400;color:#6b7280;"> / day</span>
+            </div>
+            <span class="status-badge" th:classappend="'status-' + ${vehicle.availabilityStatus}" th:text="${vehicle.availabilityStatus}"></span>
+
+            <div class="mt-2">
+                <label>Pickup Date</label>
+                <input type="date" id="startDate">
+                <label>Return Date</label>
+                <input type="date" id="endDate">
+                <button type="button" class="btn btn-secondary btn-block" onclick="checkAvailability()">Check Availability</button>
+                <div id="availabilityResult"></div>
+            </div>
+
+            <div class="mt-2" th:if="${session.loggedInUser != null and session.loggedInUser.role.name() == 'CUSTOMER'}">
+                <a id="bookNowBtn" class="btn btn-block disabled" th:href="@{/book/{id}(id=${vehicle.vehicleId})}">Book Now</a>
+                <p class="form-hint text-center">Check availability first, then book.</p>
+            </div>
+            <div class="mt-2" th:if="${session.loggedInUser == null}">
+                <a class="btn btn-block" th:href="@{/login}">Login to Book This Vehicle</a>
+            </div>
+            <div class="mt-2" th:if="${session.loggedInUser != null and session.loggedInUser.role.name() != 'CUSTOMER'}">
+                <p class="form-hint">Staff accounts cannot make customer bookings here. Use the admin Bookings screen instead.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{common/footer :: footer}"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const vehicleId = /*[[${vehicle.vehicleId}]]*/ 0;
+    const checkUrl = /*[[@{/catalog/{id}/availability(id=${vehicle.vehicleId})}]]*/ '';
+    /*]]>*/
+
+    function checkAvailability() {
+        const start = document.getElementById('startDate').value;
+        const end = document.getElementById('endDate').value;
+        const resultBox = document.getElementById('availabilityResult');
+        const bookBtn = document.getElementById('bookNowBtn');
+
+        if (!start || !end) {
+            resultBox.className = 'availability-msg availability-no';
+            resultBox.textContent = 'Please choose both a pickup and return date.';
+            return;
+        }
+
+        fetch(checkUrl + '?start=' + start + '&end=' + end)
+            .then(res => res.json())
+            .then(data => {
+                resultBox.className = 'availability-msg ' + (data.available ? 'availability-yes' : 'availability-no');
+                resultBox.textContent = data.message;
+                if (bookBtn) {
+                    if (data.available) {
+                        bookBtn.classList.remove('disabled');
+                    } else {
+                        bookBtn.classList.add('disabled');
+                    }
+                }
+            })
+            .catch(() => {
+                resultBox.className = 'availability-msg availability-no';
+                resultBox.textContent = 'Could not check availability right now.';
+            });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar(active)" class="dash-sidebar">
+    <a th:href="@{/admin}" th:classappend="${active == 'home'} ? 'active'">Overview</a>
+    <a th:href="@{/vehicles}" th:classappend="${active == 'fleet'} ? 'active'">Fleet Management</a>
+    <a th:href="@{/reservations}" th:classappend="${active == 'bookings'} ? 'active'">Bookings</a>
+    <a th:href="@{/returns}" th:classappend="${active == 'returns'} ? 'active'">Returns &amp; Damage</a>
+    <a th:href="@{/maintenance}" th:classappend="${active == 'maintenance'} ? 'active'">Maintenance</a>
+    <a th:href="@{/drivers}" th:classappend="${active == 'drivers'} ? 'active'">Driver Allocation</a>
+    <a th:href="@{/emergencies}" th:classappend="${active == 'emergency'} ? 'active'">Emergency Requests</a>
+    <a th:href="@{/admin/customers}" th:classappend="${active == 'customers'} ? 'active'">Customers</a>
+</div>
+</body>
+</html>

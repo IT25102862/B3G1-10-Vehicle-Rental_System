@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>New Booking - VRS</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Booking (Staff) - DriveEasy Rentals</title>
 <link rel="stylesheet" th:href="@{/css/style.css}"></head>
 <body>
 <div th:replace="~{common/navbar :: navbar}"></div>
-<div class="container">
+<div class="container mt-3" style="max-width:650px;">
     <div class="card">
-        <h1>New Booking</h1>
+        <h1>Create Booking (Staff)</h1>
+        <p class="form-hint">Use this for walk-in / phone bookings made by staff on behalf of a customer.</p>
         <p th:if="${error}" class="error" th:text="${error}"></p>
         <form th:action="@{/reservations/save}" th:object="${reservation}" method="post">
             <label>Vehicle</label>
@@ -16,13 +18,18 @@
             </select>
             <label>Pickup Location</label>
             <input type="text" th:field="*{pickupLocation}" required>
-            <label>Start Date</label>
-            <input type="date" th:field="*{startDate}" required>
-            <label>End Date</label>
-            <input type="date" th:field="*{endDate}" required>
+            <div class="grid grid-2">
+                <div><label>Start Date</label><input type="date" th:field="*{startDate}" required></div>
+                <div><label>Pickup Time</label><input type="time" th:field="*{pickupTime}"></div>
+            </div>
+            <div class="grid grid-2">
+                <div><label>End Date</label><input type="date" th:field="*{endDate}" required></div>
+                <div><label>Return Time</label><input type="time" th:field="*{returnTime}"></div>
+            </div>
             <button type="submit" class="btn">Book Now</button>
         </form>
     </div>
 </div>
+<div th:replace="~{common/footer :: footer}"></div>
 </body>
 </html>

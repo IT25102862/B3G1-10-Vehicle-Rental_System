@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Confirmed - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container mt-3">
+    <div class="card receipt-card">
+        <div class="receipt-icon">&#10003;</div>
+        <h1>Booking Confirmed!</h1>
+        <p>A confirmation has been recorded for booking #<span th:text="${reservation.reservationId}"></span>.
+           Please arrive on time with your driving licence.</p>
+
+        <div class="mt-3" style="text-align:left;">
+            <div class="receipt-row"><span>Vehicle</span><b th:text="${reservation.vehicle.brand + ' ' + reservation.vehicle.model}"></b></div>
+            <div class="receipt-row"><span>Status</span><span class="status-badge" th:classappend="'status-' + ${reservation.status}" th:text="${reservation.status}"></span></div>
+            <div class="receipt-row"><span>Pickup</span><b th:text="${reservation.startDate} + ' ' + ${reservation.pickupTime}"></b></div>
+            <div class="receipt-row"><span>Return</span><b th:text="${reservation.endDate} + ' ' + ${reservation.returnTime}"></b></div>
+            <div class="receipt-row"><span>Location</span><b th:text="${reservation.pickupLocation}"></b></div>
+            <div class="receipt-row total"><span>Total Paid</span><b>Rs. <span th:text="${#numbers.formatDecimal(reservation.totalAmount,0,'COMMA',2,'POINT')}"></span></b></div>
+        </div>
+
+        <a th:href="@{/my-bookings}" class="btn btn-block mt-3">Go to My Bookings</a>
+        <a th:href="@{/catalog}" class="btn btn-secondary btn-block">Continue Browsing</a>
+    </div>
+</div>
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>

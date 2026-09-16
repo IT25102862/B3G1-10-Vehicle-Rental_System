@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container mt-3" style="max-width:520px;">
+    <div class="card">
+        <h1>Payment</h1>
+        <p>Total due: <b>Rs. <span th:text="${#numbers.formatDecimal(reservation.totalAmount,0,'COMMA',2,'POINT')}"></span></b></p>
+
+        <form th:action="@{/book/payment/{id}(id=${reservation.reservationId})}" method="post">
+            <label>Payment Method</label>
+            <select name="method" required>
+                <option value="Card">Credit / Debit Card</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Cash">Cash on Pickup</option>
+            </select>
+
+            <div id="cardFields">
+                <label>Card Number</label>
+                <input type="text" placeholder="4242 4242 4242 4242" maxlength="19">
+                <div class="grid grid-2">
+                    <div><label>Expiry</label><input type="text" placeholder="MM/YY" maxlength="5"></div>
+                    <div><label>CVV</label><input type="text" placeholder="123" maxlength="4"></div>
+                </div>
+                <p class="form-hint">This is a student-project payment simulation - no real card
+                    processor is contacted. The payment is simply recorded internally, consistent
+                    with the proposal's "Zero External Dependencies" constraint.</p>
+            </div>
+
+            <button type="submit" class="btn btn-block">Pay Now &amp; Confirm Booking</button>
+        </form>
+    </div>
+</div>
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>

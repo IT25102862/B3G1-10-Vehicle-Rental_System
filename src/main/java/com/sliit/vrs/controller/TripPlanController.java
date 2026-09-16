@@ -32,19 +32,47 @@ public class TripPlanController {
         return "tripplan/form";
     }
 
-
-    @PostMapping("/save")
-    public String createTripPlan(@ModelAttribute TripPlan tripPlan, HttpSession session) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-        tripPlan.setCustomer(loggedInUser);
-        tripPlanService.createTripPlan(tripPlan);
-        return "redirect:/tripplans";
-    }
-    @GetMapping("/{id}/recommendations")
-    public String showRecommendations(@PathVariable Long id, Model model) {
+    @GetMapping("/edit/{id}")
+    public String editTripPlan(@PathVariable Long id, Model model) {
         TripPlan tripPlan = tripPlanService.getById(id);
         model.addAttribute("tripPlan", tripPlan);
-        model.addAttribute("recommendations", tripPlanService.generateRecommendations(tripPlan));
+        return "tripplan/form";
+    }
+
+    @PostMapping("/save")
+    public String createTripPlan(
+            @ModelAttribute TripPlan tripPlan,
+            HttpSession session) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        tripPlan.setCustomer(loggedInUser);
+
+        tripPlanService.createTripPlan(tripPlan);
+
+        return "redirect:/tripplans";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteTripPlan(@PathVariable Long id) {
+        tripPlanService.deleteTripPlan(id);
+        return "redirect:/tripplans";
+    }
+
+    @GetMapping("/{id}/recommendations")
+    public String showRecommendations(
+            @PathVariable Long id,
+            Model model) {
+
+        TripPlan tripPlan = tripPlanService.getById(id);
+
+        model.addAttribute("tripPlan", tripPlan);
+        model.addAttribute(
+                "recommendations",
+                tripPlanService.generateRecommendations(tripPlan)
+        );
+
         return "tripplan/recommendations";
     }
 }

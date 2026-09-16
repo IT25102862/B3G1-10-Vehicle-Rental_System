@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customers - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container mt-3">
+    <h1>Customer Management</h1>
+    <div class="dash-layout mt-2">
+        <div th:replace="~{admin/sidebar :: sidebar('customers')}"></div>
+        <div class="card">
+            <table>
+                <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Licence No.</th></tr>
+                <tr th:each="c : ${customers}">
+                    <td th:text="${c.userId}"></td>
+                    <td th:text="${c.fullName}"></td>
+                    <td th:text="${c.email}"></td>
+                    <td th:text="${c.phoneNumber}"></td>
+                    <td th:text="${c.drivingLicenceNo}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(customers)}"><td colspan="5">No customers registered yet.</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>

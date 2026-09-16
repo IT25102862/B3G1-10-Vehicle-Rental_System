@@ -22,7 +22,7 @@ public class FuelPriceService {
         return fuelPriceRepository.save(fuelPrice);
     }
 
-    private boolean existFuelPriceByType(FuelType fuelType) {
+    public boolean existFuelPriceByType(FuelType fuelType) {
         return fuelPriceRepository.existsFuelPriceByFuelType(fuelType);
     }
 
@@ -62,5 +62,4 @@ public class FuelPriceService {
         FuelPrice fuelPrice = fuelPriceRepository.getFuelPriceByFuelType(fuelType);
         return fuelPrice.getPrice();
     }
-
 }

@@ -23,67 +23,107 @@ public class EntityConverters implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
 
-        // VehicleCategory Converter
+        // 1. VehicleCategory Converter
         registry.addConverter(new Converter<String, VehicleCategory>() {
             @Override
-            public VehicleCategory convert(String id) {
-                return (id == null || id.isBlank()) ? null : categoryRepository.findById(Long.valueOf(id)).orElse(null);
+            public VehicleCategory convert(String source) {
+                if (source == null || source.isBlank()) return null;
+                try {
+                    return categoryRepository.findById(Long.valueOf(source)).orElse(null);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         });
 
-        // Vehicle Converter
+        // 2. Vehicle Converter
         registry.addConverter(new Converter<String, Vehicle>() {
             @Override
-            public Vehicle convert(String id) {
-                return (id == null || id.isBlank()) ? null : vehicleRepository.findById(Long.valueOf(id)).orElse(null);
+            public Vehicle convert(String source) {
+                if (source == null || source.isBlank()) return null;
+                try {
+                    return vehicleRepository.findById(Long.valueOf(source)).orElse(null);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         });
 
-        // User Converter
+        // 3. User Converter
         registry.addConverter(new Converter<String, User>() {
             @Override
-            public User convert(String id) {
-                return (id == null || id.isBlank()) ? null : userRepository.findById(Long.valueOf(id)).orElse(null);
+            public User convert(String source) {
+                if (source == null || source.isBlank()) return null;
+                try {
+                    return userRepository.findById(Long.valueOf(source)).orElse(null);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         });
 
-        // Employee Converter
+        // 4. Employee Converter
         registry.addConverter(new Converter<String, Employee>() {
             @Override
-            public Employee convert(String id) {
-                return (id == null || id.isBlank()) ? null : employeeRepository.findById(Long.valueOf(id)).orElse(null);
+            public Employee convert(String source) {
+                if (source == null || source.isBlank()) return null;
+                try {
+                    return employeeRepository.findById(Long.valueOf(source)).orElse(null);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         });
 
-        // Reservation Converter
+        // 5. Reservation Converter
         registry.addConverter(new Converter<String, Reservation>() {
             @Override
-            public Reservation convert(String id) {
-                return (id == null || id.isBlank()) ? null : reservationRepository.findById(Long.valueOf(id)).orElse(null);
+            public Reservation convert(String source) {
+                if (source == null || source.isBlank()) return null;
+                try {
+                    return reservationRepository.findById(Long.valueOf(source)).orElse(null);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         });
 
-        // VehicleReturn Converter
+        // 6. VehicleReturn Converter
         registry.addConverter(new Converter<String, VehicleReturn>() {
             @Override
-            public VehicleReturn convert(String id) {
-                return (id == null || id.isBlank()) ? null : vehicleReturnRepository.findById(Long.valueOf(id)).orElse(null);
+            public VehicleReturn convert(String source) {
+                if (source == null || source.isBlank()) return null;
+                try {
+                    return vehicleReturnRepository.findById(Long.valueOf(source)).orElse(null);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         });
 
-        // DamageAssessment Converter
+        // 7. DamageAssessment Converter
         registry.addConverter(new Converter<String, DamageAssessment>() {
             @Override
-            public DamageAssessment convert(String id) {
-                return (id == null || id.isBlank()) ? null : damageAssessmentRepository.findById(Long.valueOf(id)).orElse(null);
+            public DamageAssessment convert(String source) {
+                if (source == null || source.isBlank()) return null;
+                try {
+                    return damageAssessmentRepository.findById(Long.valueOf(source)).orElse(null);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         });
 
-        // TripPlan Converter
+        // 8. TripPlan Converter
         registry.addConverter(new Converter<String, TripPlan>() {
             @Override
-            public TripPlan convert(String id) {
-                return (id == null || id.isBlank()) ? null : tripPlanRepository.findById(Long.valueOf(id)).orElse(null);
+            public TripPlan convert(String source) {
+                if (source == null || source.isBlank()) return null;
+                try {
+                    return tripPlanRepository.findById(Long.valueOf(source)).orElse(null);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         });
     }

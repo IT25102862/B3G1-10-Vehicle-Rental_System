@@ -1,19 +1,42 @@
-<!-- Reusable navbar fragment. Included into every protected page with:
+<!-- Reusable navbar fragment. Included into every page with:
      <div th:replace="~{common/navbar :: navbar}"></div>
-     This avoids copy-pasting the same HTML on every page. -->
+     Shows different links depending on whether someone is logged in,
+     and whether they are a customer or staff member. -->
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <nav th:fragment="navbar" class="navbar">
-    <a th:href="@{/dashboard}" class="brand">VRS - Vehicle Rental System</a>
-    <div class="nav-links">
-        <a th:href="@{/vehicles}">Fleet</a>
-        <a th:href="@{/reservations}">Bookings</a>
-        <a th:href="@{/emergencies}">Emergency</a>
-        <a th:href="@{/returns}">Returns</a>
-        <a th:href="@{/tripplans}">Trip Planner</a>
-        <a th:href="@{/maintenance}">Maintenance</a>
-        <a th:href="@{/drivers}">Drivers</a>
-        <a th:href="@{/logout}" class="logout">Logout</a>
+    <div class="navbar-inner">
+        <a th:href="@{/}" class="brand"><span class="logo-dot">&#9679;</span> DriveEasy Rentals</a>
+        <div class="nav-links">
+            <a th:href="@{/catalog}">Browse Vehicles</a>
+
+            <!-- Logged out -->
+            <th:block th:if="${session.loggedInUser == null}">
+                <a th:href="@{/login}">Login</a>
+                <a th:href="@{/register}" class="btn-nav">Sign Up</a>
+            </th:block>
+
+            <!-- Logged in: customer -->
+            <th:block th:if="${session.loggedInUser != null and session.loggedInUser.role.name() == 'CUSTOMER'}">
+                <a th:href="@{/my-bookings}">My Bookings</a>
+                <a th:href="@{/tripplans}">Trip Planner</a>
+                <a th:href="@{/emergencies}">Emergency</a>
+                <a th:href="@{/profile}">Profile</a>
+                <a th:href="@{/dashboard}" class="btn-nav">Dashboard</a>
+                <a th:href="@{/logout}" class="logout">Logout</a>
+            </th:block>
+
+            <!-- Logged in: staff/admin -->
+            <th:block th:if="${session.loggedInUser != null and session.loggedInUser.role.name() != 'CUSTOMER'}">
+                <a th:href="@{/vehicles}">Fleet</a>
+                <a th:href="@{/reservations}">Bookings</a>
+                <a th:href="@{/returns}">Returns</a>
+                <a th:href="@{/maintenance}">Maintenance</a>
+                <a th:href="@{/fuel}">Fuel Prices</a>
+                <a th:href="@{/admin}" class="btn-nav">Admin Panel</a>
+                <a th:href="@{/logout}" class="logout">Logout</a>
+            </th:block>
+        </div>
     </div>
 </nav>
 </body>

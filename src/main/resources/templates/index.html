@@ -1,13 +1,111 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Vehicle Rental System</title>
-<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEasy Rentals - Rent a Vehicle in Minutes</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
 <body>
-<div class="landing">
-    <h1>Web-based Vehicle Rental System</h1>
-    <p>SE2030 Software Engineering Group Project - SLIIT</p>
-    <a class="btn" th:href="@{/login}">Login</a>
-    <a class="btn" th:href="@{/register}">Register</a>
-</div>
+<div th:replace="~{common/navbar :: navbar}"></div>
+
+<section class="hero">
+    <div class="container">
+        <h1>Rent the Right Vehicle,<br>Right When You Need It</h1>
+        <p>Sedans, SUVs, vans and motorcycles - browse our live fleet, check real-time
+           availability, and book online in minutes.</p>
+        <a th:href="@{/catalog}" class="btn btn-accent">Browse Vehicles</a>
+        <a th:href="@{/register}" class="btn btn-outline">Create Free Account</a>
+
+        <form th:action="@{/catalog}" method="get" class="search-bar">
+            <div class="field">
+                <label>Keyword</label>
+                <input type="text" name="keyword" placeholder="e.g. Corolla, CR-V...">
+            </div>
+            <div class="field">
+                <label>Vehicle Type</label>
+                <select name="categoryId">
+                    <option value="">Any type</option>
+                    <option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn" style="margin-top:4px;">Search</button>
+        </form>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-title">
+            <span class="badge-pill">FEATURED FLEET</span>
+            <h2>Available Right Now</h2>
+            <p>A live snapshot of vehicles ready to book today.</p>
+        </div>
+
+        <div class="grid grid-3" th:if="${!#lists.isEmpty(featuredVehicles)}">
+            <div class="vehicle-card" th:each="v : ${featuredVehicles}">
+                <img class="thumb"
+                     th:src="${v.imageUrl != null} ? @{${v.imageUrl}} : 'https://placehold.co/500x300?text=' + ${v.brand}"
+                     alt="Vehicle photo">
+                <div class="body">
+                    <span class="category-tag" th:text="${v.category?.categoryName}">Category</span>
+                    <h3 th:text="${v.brand + ' ' + v.model}">Brand Model</h3>
+                    <div class="specs">
+                        <span th:if="${v.seats}">&#128100; <span th:text="${v.seats}"></span> seats</span>
+                        <span th:if="${v.transmission}">&#9881; <span th:text="${v.transmission}"></span></span>
+                        <span th:if="${v.fuelType}">&#9981; <span th:text="${v.fuelType}"></span></span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">
+                            Rs. <span th:text="${v.category != null ? #numbers.formatDecimal(v.category.baseRate,0,'COMMA',0,'POINT') : '-'}">0</span>
+                            <span>/ day</span>
+                        </div>
+                        <a th:href="@{/catalog/{id}(id=${v.vehicleId})}" class="btn btn-small">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="text-center" th:if="${#lists.isEmpty(featuredVehicles)}">
+            No vehicles available right now - check back soon, or
+            <a th:href="@{/vehicles/add}">add vehicles to the fleet</a> if you're an admin.
+        </p>
+        <div class="text-center mt-3">
+            <a th:href="@{/catalog}" class="btn btn-secondary">View Full Fleet</a>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="background:#fff;">
+    <div class="container">
+        <div class="section-title">
+            <span class="badge-pill">WHY DRIVEEASY</span>
+            <h2>A Rental Experience You Can Trust</h2>
+        </div>
+        <div class="grid grid-4">
+            <div class="feature-card">
+                <div class="icon">&#128663;</div>
+                <h3>Wide Fleet Choice</h3>
+                <p>From city cars to spacious vans - find the right fit for every trip.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#9989;</div>
+                <h3>Instant Availability</h3>
+                <p>Real-time availability checking means no surprises at pickup.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128274;</div>
+                <h3>Secure Booking</h3>
+                <p>Your account and payments are protected with industry-standard security.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128222;</div>
+                <h3>24/7 Roadside Help</h3>
+                <p>Emergency and breakdown assistance is one click away, anytime.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{common/footer :: footer}"></div>
 </body>
 </html>

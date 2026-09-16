@@ -1,91 +1,96 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Vehicle Form - VRS</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
-
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Form - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
 <body>
-
 <div th:replace="~{common/navbar :: navbar}"></div>
-
-<div class="container">
+<div class="container mt-3" style="max-width:700px;">
     <div class="card">
+        <h1 th:text="${vehicle.vehicleId} ? 'Edit Vehicle' : 'Add Vehicle'">Vehicle Form</h1>
 
-        <h1 th:text="${vehicle.vehicleId} ? 'Edit Vehicle' : 'Add Vehicle'">
-            Vehicle Form
-        </h1>
+        <img th:if="${vehicle.imageUrl != null}" th:src="@{${vehicle.imageUrl}}"
+             style="width:100%;max-height:220px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
 
-        <form th:action="@{/vehicles/save}"
-              th:object="${vehicle}"
-              method="post">
-
+        <form th:action="@{/vehicles/save}" th:object="${vehicle}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{vehicleId}">
 
-            <label>Registration No</label>
-            <input type="text"
-                   th:field="*{registrationNo}"
-                   required>
+            <label>Vehicle Photo</label>
+            <input type="file" name="imageFile" accept="image/*">
+            <p class="form-hint">JPEG or PNG, up to 5MB. Leave empty to keep the existing photo when editing.</p>
 
-            <label>Brand</label>
-            <input type="text"
-                   th:field="*{brand}"
-                   required>
-
-            <label>Model</label>
-            <input type="text"
-                   th:field="*{model}"
-                   required>
-
-            <label>Year</label>
-            <input type="number"
-                   th:field="*{year}">
-
-            <label>Mileage (km)</label>
-            <input type="number"
-                   step="0.1"
-                   th:field="*{mileage}">
-
-            <label>Fuel Type</label>
-            <select th:field="*{fuelType}">
-                <option value="">-- Select Fuel Type --</option>
-                <option th:each="f : ${fuelTypes}"
-                        th:value="${f}"
-                        th:text="${f}">
-                </option>
-            </select>
-
-            <label>Fuel Consumption (km/L)</label>
-            <input type="number"
-                   step="0.01"
-                   th:field="*{fuelConsumption}">
-
-            <label>Category</label>
-            <select th:field="*{category}">
-                <option th:each="c : ${categories}"
-                        th:value="${c.categoryId}"
-                        th:text="${c.categoryName + ' (Rs.' + c.baseRate + '/day)'}">
-                </option>
-            </select>
-
+            <div class="grid grid-2">
+                <div>
+                    <label>Registration No</label>
+                    <input type="text" th:field="*{registrationNo}" required>
+                </div>
+                <div>
+                    <label>Category</label>
+                    <select th:field="*{category}">
+                        <option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName + ' (Rs.' + c.baseRate + '/day)'}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>Brand</label>
+                    <input type="text" th:field="*{brand}" required>
+                </div>
+                <div>
+                    <label>Model</label>
+                    <input type="text" th:field="*{model}" required>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>Year</label>
+                    <input type="number" th:field="*{year}">
+                </div>
+                <div>
+                    <label>Mileage (km)</label>
+                    <input type="number" step="0.1" th:field="*{mileage}">
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>Transmission</label>
+                    <select th:field="*{transmission}">
+                        <option value="Automatic">Automatic</option>
+                        <option value="Manual">Manual</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Fuel Type</label>
+                    <select th:field="*{fuelType}">
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Hybrid">Hybrid</option>
+                        <option value="Electric">Electric</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>Seats</label>
+                    <input type="number" th:field="*{seats}">
+                </div>
+                <div>
+                    <label>Color</label>
+                    <input type="text" th:field="*{color}">
+                </div>
+            </div>
+            <label>Pickup Location / Branch</label>
+            <input type="text" th:field="*{location}" placeholder="e.g. Colombo Main Branch">
+            <label>Description</label>
+            <textarea th:field="*{description}" rows="3" placeholder="Short highlight for the catalog page"></textarea>
             <label>Availability Status</label>
             <select th:field="*{availabilityStatus}">
-                <option th:each="s : ${statuses}"
-                        th:value="${s}"
-                        th:text="${s}">
-                </option>
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
             </select>
-
-            <button type="submit" class="btn">
-                Save Vehicle
-            </button>
-
+            <button type="submit" class="btn">Save Vehicle</button>
         </form>
-
     </div>
 </div>
-
+<div th:replace="~{common/footer :: footer}"></div>
 </body>
 </html>

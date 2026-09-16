@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Login - VRS</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - DriveEasy Rentals</title>
 <link rel="stylesheet" th:href="@{/css/style.css}"></head>
 <body>
-<div class="auth-box card">
-    <h2>Login</h2>
-    <p th:if="${param.registered}" class="success">Registration successful. Please log in.</p>
-    <p th:if="${error}" class="error" th:text="${error}"></p>
-    <form th:action="@{/login}" method="post">
-        <label>Email</label>
-        <input type="email" name="email" required>
-        <label>Password</label>
-        <input type="password" name="password" required>
-        <button type="submit" class="btn">Login</button>
-    </form>
-    <p style="margin-top:14px;">No account? <a th:href="@{/register}">Register here</a></p>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="auth-wrapper">
+    <div class="auth-box">
+        <div class="auth-logo">&#9679; DriveEasy Rentals</div>
+        <div class="card">
+            <h2>Welcome Back</h2>
+            <p th:if="${param.registered}" class="success">Registration successful. Please log in.</p>
+            <p th:if="${error}" class="error" th:text="${error}"></p>
+            <form th:action="@{/login}" method="post">
+                <label>Email</label>
+                <input type="email" name="email" required autofocus>
+                <label>Password</label>
+                <input type="password" name="password" required>
+                <button type="submit" class="btn btn-block">Login</button>
+            </form>
+            <p class="mt-2 text-center">No account? <a th:href="@{/register}">Create one for free</a></p>
+        </div>
+    </div>
 </div>
+<div th:replace="~{common/footer :: footer}"></div>
 </body>
 </html>

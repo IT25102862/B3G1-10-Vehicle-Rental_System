@@ -1,30 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Plan a Trip - VRS</title>
-<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Trip Plan - VRS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
 <body>
+
 <div th:replace="~{common/navbar :: navbar}"></div>
+
 <div class="container">
     <div class="card">
-        <h1>Plan a New Trip</h1>
-        <form th:action="@{/tripplans/save}" th:object="${tripPlan}" method="post">
+
+        <h1 th:text="${tripPlan.tripPlanId == null
+                    ? 'Plan a New Trip'
+                    : 'Edit Trip Plan'}">
+            Plan a New Trip
+        </h1>
+
+        <form th:action="@{/tripplans/save}"
+              method="post"
+              th:object="${tripPlan}">
+
+            <!-- ID -->
+            <input type="hidden"
+                   th:field="*{tripPlanId}">
+
+            <!-- Trip Name -->
             <label>Trip Name</label>
-            <input type="text" th:field="*{tripName}" required>
+            <input type="text"
+                   th:field="*{tripName}"
+                   required>
+
+            <!-- Start Location -->
             <label>Start Location</label>
-            <input type="text" th:field="*{startLocation}" required>
+            <input type="text"
+                   th:field="*{startLocation}"
+                   required>
+
+            <!-- Destination -->
             <label>Destination</label>
-            <input type="text" th:field="*{destination}" required>
+            <input type="text"
+                   th:field="*{destination}"
+                   required>
+
+            <!-- Start Date -->
             <label>Start Date</label>
-            <input type="date" th:field="*{startDate}">
+            <input type="date"
+                   name="startDate"
+                   th:value="${tripPlan.startDate}"
+                   required>
+
+            <!-- End Date -->
             <label>End Date</label>
-            <input type="date" th:field="*{endDate}">
+            <input type="date"
+                   name="endDate"
+                   th:value="${tripPlan.endDate}"
+                   required>
+
+            <!-- Passenger Count -->
             <label>Passenger Count</label>
-            <input type="number" th:field="*{passengerCount}" min="1" value="1">
+            <input type="number"
+                   th:field="*{passengerCount}"
+                   min="1"
+                   required>
+
+            <!-- Distance -->
             <label>Estimated Distance (km)</label>
-            <input type="number" step="0.1" th:field="*{distanceKm}">
-            <button type="submit" class="btn">Save Trip Plan</button>
+            <input type="number"
+                   step="0.1"
+                   th:field="*{distanceKm}"
+                   min="0">
+
+            <!-- Submit -->
+            <button type="submit"
+                    class="btn"
+                    th:text="${tripPlan.tripPlanId == null
+                            ? 'Save Trip Plan'
+                            : 'Update Trip Plan'}">
+                Save Trip Plan
+            </button>
+
         </form>
+
     </div>
 </div>
+
+<div th:replace="~{common/footer :: footer}"></div>
+
 </body>
 </html>

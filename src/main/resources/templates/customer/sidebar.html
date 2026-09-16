@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Reusable sidebar for the customer dashboard area. "active" is passed
+     in from each page so the current section is highlighted. -->
+<div th:fragment="sidebar(active)" class="dash-sidebar">
+    <a th:href="@{/dashboard}" th:classappend="${active == 'home'} ? 'active'">Overview</a>
+    <a th:href="@{/my-bookings}" th:classappend="${active == 'bookings'} ? 'active'">My Bookings</a>
+    <a th:href="@{/tripplans}" th:classappend="${active == 'trips'} ? 'active'">Trip Planner</a>
+    <a th:href="@{/emergencies}" th:classappend="${active == 'emergency'} ? 'active'">Emergency Assistance</a>
+    <a th:href="@{/profile}" th:classappend="${active == 'profile'} ? 'active'">My Profile</a>
+    <a th:href="@{/catalog}">Browse Vehicles</a>
+</div>
+</body>
+</html>

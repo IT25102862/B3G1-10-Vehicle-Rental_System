@@ -27,4 +27,6 @@ public class VehicleRecommendation {
     private Double suitabilityScore;   // 0-100, simple rule-based score
     private String reason;
     private Double estimatedFuelCost;
+    private Double rentalCost;
+
 }

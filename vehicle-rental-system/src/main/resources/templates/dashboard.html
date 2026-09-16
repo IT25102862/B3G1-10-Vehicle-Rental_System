@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Dashboard - VRS</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container">
+    <h1>Dashboard</h1>
+    <p>Welcome back, <b th:text="${session.loggedInUser?.fullName}">User</b>
+       (<span th:text="${session.loggedInUser?.role}">ROLE</span>)</p>
+    <div class="card">
+        <h2>Modules</h2>
+        <ul>
+            <li><a th:href="@{/vehicles}">Vehicle Fleet Management</a> - Member 1</li>
+            <li><a th:href="@{/reservations}">Booking &amp; Reservation Management</a> - Member 2</li>
+            <li><a th:href="@{/emergencies}">Emergency &amp; Roadside Assistance</a> - Member 3</li>
+            <li><a th:href="@{/returns}">Vehicle Handover, Return &amp; Damage Assessment</a> - Member 4</li>
+            <li><a th:href="@{/tripplans}">Vehicle Recommendations &amp; Trip Planning</a> - Member 5</li>
+            <li><a th:href="@{/maintenance}">Maintenance Operations</a> - Member 6</li>
+            <li><a th:href="@{/drivers}">Driver Allocation</a> - Member 6</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

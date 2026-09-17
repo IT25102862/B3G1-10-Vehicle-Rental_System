@@ -18,7 +18,7 @@ public class Employee {
     private String name;
     private String phoneNo;
     private String email;
-    private String position;       // e.g. "Senior Driver", "Maintenance Technician"
+    private String position;       // e.g. "Senior Driver", "Maintenance Technician."
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Bookings - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container mt-3">
+    <h1>My Bookings</h1>
+    <div class="dash-layout mt-2">
+        <div th:replace="~{customer/sidebar :: sidebar('bookings')}"></div>
+        <div class="card">
+            <table>
+                <tr><th>Booking #</th><th>Vehicle</th><th>Pickup</th><th>Return</th><th>Total</th><th>Status</th></tr>
+                <tr th:each="b : ${bookings}">
+                    <td th:text="${b.reservationId}"></td>
+                    <td th:text="${b.vehicle?.brand + ' ' + b.vehicle?.model}"></td>
+                    <td th:text="${b.startDate}"></td>
+                    <td th:text="${b.endDate}"></td>
+                    <td th:text="'Rs. ' + ${#numbers.formatDecimal(b.totalAmount,0,'COMMA',2,'POINT')}"></td>
+                    <td><span class="status-badge" th:classappend="'status-' + ${b.status}" th:text="${b.status}"></span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(bookings)}">
+                    <td colspan="6">You haven't made any bookings yet. <a th:href="@{/catalog}">Browse the fleet</a> to get started.</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>

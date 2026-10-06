@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Vehicle - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container mt-3" style="max-width:700px;">
+    <div class="card">
+        <h1>Book: <span th:text="${vehicle.brand + ' ' + vehicle.model}"></span></h1>
+        <p>Rs. <span th:text="${vehicle.category != null ? #numbers.formatDecimal(vehicle.category.baseRate,0,'COMMA',0,'POINT') : '-'}"></span> / day &middot;
+           <span th:text="${vehicle.category?.categoryName}"></span></p>
+
+        <p th:if="${error}" class="error" th:text="${error}"></p>
+
+        <form th:action="@{/book/{id}(id=${vehicle.vehicleId})}" th:object="${reservation}" method="post">
+            <div class="grid grid-2">
+                <div>
+                    <label>Pickup Date</label>
+                    <input type="date" th:field="*{startDate}" required>
+                </div>
+                <div>
+                    <label>Pickup Time</label>
+                    <input type="time" th:field="*{pickupTime}" required>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>Return Date</label>
+                    <input type="date" th:field="*{endDate}" required>
+                </div>
+                <div>
+                    <label>Return Time</label>
+                    <input type="time" th:field="*{returnTime}" required>
+                </div>
+            </div>
+            <label>Pickup Location</label>
+            <input type="text" th:field="*{pickupLocation}" placeholder="e.g. Colombo Main Branch" required>
+            <label>Drop-off Location</label>
+            <input type="text" th:field="*{dropoffLocation}" placeholder="Leave blank if same as pickup">
+            <label>Special Requests (optional)</label>
+            <textarea th:field="*{notes}" rows="3" placeholder="Child seat, GPS, extra driver..."></textarea>
+
+            <button type="submit" class="btn btn-block">Continue to Confirmation</button>
+        </form>
+    </div>
+</div>
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>

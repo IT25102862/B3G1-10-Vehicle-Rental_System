@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Register - VRS</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account - DriveEasy Rentals</title>
 <link rel="stylesheet" th:href="@{/css/style.css}"></head>
 <body>
-<div class="auth-box card">
-    <h2>Create Account</h2>
-    <p th:if="${error}" class="error" th:text="${error}"></p>
-    <form th:action="@{/register}" method="post">
-        <label>Full Name</label>
-        <input type="text" name="fullName" required>
-        <label>Email</label>
-        <input type="email" name="email" required>
-        <label>Password</label>
-        <input type="password" name="password" required>
-        <label>Phone Number</label>
-        <input type="text" name="phone">
-        <label>Role</label>
-        <select name="role">
-            <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
-        </select>
-        <button type="submit" class="btn">Register</button>
-    </form>
-    <p style="margin-top:14px;">Already have an account? <a th:href="@{/login}">Login</a></p>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="auth-wrapper">
+    <div class="auth-box">
+        <div class="auth-logo">&#9679; DriveEasy Rentals</div>
+        <div class="card">
+            <h2>Create Your Account</h2>
+            <p th:if="${error}" class="error" th:text="${error}"></p>
+            <form th:action="@{/register}" method="post">
+                <label>Full Name</label>
+                <input type="text" name="fullName" required>
+                <label>Email</label>
+                <input type="email" name="email" required>
+                <div class="grid grid-2">
+                    <div>
+                        <label>Password</label>
+                        <input type="password" name="password" required minlength="6">
+                    </div>
+                    <div>
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirmPassword" required minlength="6">
+                    </div>
+                </div>
+                <p class="form-hint">At least 6 characters.</p>
+                <label>Phone Number</label>
+                <input type="text" name="phone">
+                <label>Account Type</label>
+                <select name="role">
+                    <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+                </select>
+                <p class="form-hint">Choose <b>CUSTOMER</b> unless you're a staff member setting up a test account for a module demo.</p>
+                <button type="submit" class="btn btn-block">Create Account</button>
+            </form>
+            <p class="mt-2 text-center">Already registered? <a th:href="@{/login}">Login here</a></p>
+        </div>
+    </div>
 </div>
+<div th:replace="~{common/footer :: footer}"></div>
 </body>
 </html>

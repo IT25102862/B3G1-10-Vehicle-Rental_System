@@ -31,12 +31,12 @@ public class CatalogController {
 
     @GetMapping("/catalog")
     public String browseCatalog(@RequestParam(required = false) String keyword,
-                                @RequestParam(required = false) Long categoryId,
-                                @RequestParam(required = false) String transmission,
-                                @RequestParam(required = false) String fuelType,
-                                @RequestParam(required = false) Integer minSeats,
-                                @RequestParam(required = false) String sortBy,
-                                Model model) {
+                                 @RequestParam(required = false) Long categoryId,
+                                 @RequestParam(required = false) String transmission,
+                                 @RequestParam(required = false) String fuelType,
+                                 @RequestParam(required = false) Integer minSeats,
+                                 @RequestParam(required = false) String sortBy,
+                                 Model model) {
 
         model.addAttribute("vehicles",
                 vehicleService.searchCatalog(keyword, categoryId, transmission, fuelType, minSeats, sortBy));
@@ -64,8 +64,8 @@ public class CatalogController {
     @GetMapping("/catalog/{id}/availability")
     @ResponseBody
     public Map<String, Object> checkAvailability(@PathVariable Long id,
-                                                 @RequestParam String start,
-                                                 @RequestParam String end) {
+                                                   @RequestParam String start,
+                                                   @RequestParam String end) {
         try {
             LocalDate startDate = LocalDate.parse(start);
             LocalDate endDate = LocalDate.parse(end);

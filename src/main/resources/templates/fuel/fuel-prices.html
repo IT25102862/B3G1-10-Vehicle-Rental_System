@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fuel Prices - VRS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="~{common/navbar :: navbar}"></div>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>Fuel Prices</h1>
+
+        <a class="btn" th:href="@{/fuel/new}">
+            + Add Fuel Price
+        </a>
+
+        <table>
+
+            <tr>
+                <th>ID</th>
+                <th>Fuel Type</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+
+            <tr th:each="fuel : ${fuelPrices}">
+
+                <td th:text="${fuel.fuelPriceId}"></td>
+
+                <td th:text="${fuel.fuelType}"></td>
+
+                <td th:text="${fuel.price}"></td>
+
+                <td>
+
+                    <a class="btn btn-small"
+                       th:href="@{/fuel/edit/{id}(id=${fuel.fuelPriceId})}">
+                        Edit
+                    </a>
+
+                    <a class="btn btn-small btn-danger"
+                       th:href="@{/fuel/delete/{id}(id=${fuel.fuelPriceId})}"
+                       onclick="return confirm('Delete this fuel price?');">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container mt-3">
+    <h1>Admin Dashboard</h1>
+    <div class="dash-layout mt-2">
+        <div th:replace="~{admin/sidebar :: sidebar('home')}"></div>
+        <div>
+            <div class="grid grid-4">
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${totalVehicles}">0</div>
+                    <div class="stat-label">Total Vehicles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${availableVehicles}">0</div>
+                    <div class="stat-label">Available Now</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${totalBookings}">0</div>
+                    <div class="stat-label">Total Bookings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${pendingBookings}">0</div>
+                    <div class="stat-label">Pending Approval</div>
+                </div>
+            </div>
+            <div class="grid grid-2 mt-2">
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${totalCustomers}">0</div>
+                    <div class="stat-label">Registered Customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">Rs. <span th:text="${#numbers.formatDecimal(totalRevenue,0,'COMMA',2,'POINT')}">0</span></div>
+                    <div class="stat-label">Total Revenue Collected</div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <h2>Recent Bookings</h2>
+                <table>
+                    <tr><th>ID</th><th>Customer</th><th>Vehicle</th><th>Status</th></tr>
+                    <tr th:each="r : ${recentBookings}">
+                        <td th:text="${r.reservationId}"></td>
+                        <td th:text="${r.customer?.fullName}"></td>
+                        <td th:text="${r.vehicle?.brand + ' ' + r.vehicle?.model}"></td>
+                        <td><span class="status-badge" th:classappend="'status-' + ${r.status}" th:text="${r.status}"></span></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(recentBookings)}"><td colspan="4">No bookings yet.</td></tr>
+                </table>
+                <a th:href="@{/reservations}" class="btn btn-small mt-2">View All Bookings</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Summary - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container mt-3" style="max-width:650px;">
+    <div class="card">
+        <h1>Booking Summary</h1>
+        <p>Review the details below before proceeding to payment.</p>
+
+        <div class="receipt-row"><span>Vehicle</span><b th:text="${reservation.vehicle.brand + ' ' + reservation.vehicle.model}"></b></div>
+        <div class="receipt-row"><span>Pickup</span><b th:text="${reservation.startDate} + ' ' + ${reservation.pickupTime}"></b></div>
+        <div class="receipt-row"><span>Return</span><b th:text="${reservation.endDate} + ' ' + ${reservation.returnTime}"></b></div>
+        <div class="receipt-row"><span>Pickup Location</span><b th:text="${reservation.pickupLocation}"></b></div>
+        <div class="receipt-row" th:if="${reservation.notes}"><span>Notes</span><b th:text="${reservation.notes}"></b></div>
+        <div class="receipt-row total"><span>Total Amount</span><b>Rs. <span th:text="${#numbers.formatDecimal(reservation.totalAmount,0,'COMMA',2,'POINT')}"></span></b></div>
+
+        <a th:href="@{/book/payment/{id}(id=${reservation.reservationId})}" class="btn btn-block mt-3">Proceed to Payment</a>
+        <a th:href="@{/catalog}" class="btn btn-secondary btn-block">Cancel and Keep Browsing</a>
+    </div>
+</div>
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>

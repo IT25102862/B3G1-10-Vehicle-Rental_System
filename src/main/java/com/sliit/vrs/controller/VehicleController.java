@@ -12,12 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-// ===================================================================
-// MEMBER 1 (IT25101915 - Panapitiya P.K.S.C.) - Vehicle Fleet Management
-// Handles: Create / Read / Update / Delete vehicles, vehicle categories,
-// vehicle status (Available / Rented / Under Maintenance), and (v2)
-// vehicle photo upload/management.
-// ===================================================================
+
 @Controller
 @RequestMapping("/vehicles")
 public class VehicleController {

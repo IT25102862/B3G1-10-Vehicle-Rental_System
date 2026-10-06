@@ -10,9 +10,11 @@
         <h1>Payment</h1>
         <p>Total due: <b>Rs. <span th:text="${#numbers.formatDecimal(reservation.totalAmount,0,'COMMA',2,'POINT')}"></span></b></p>
 
+        <p th:if="${error}" class="error" th:text="${error}"></p>
+
         <form th:action="@{/book/payment/{id}(id=${reservation.reservationId})}" method="post">
             <label>Payment Method</label>
-            <select name="method" required>
+            <select name="method" id="paymentMethod" required onchange="toggleCardFields()">
                 <option value="Card">Credit / Debit Card</option>
                 <option value="Bank Transfer">Bank Transfer</option>
                 <option value="Cash">Cash on Pickup</option>
@@ -20,10 +22,13 @@
 
             <div id="cardFields">
                 <label>Card Number</label>
-                <input type="text" placeholder="4242 4242 4242 4242" maxlength="19">
+                <input type="text" class="card-input" placeholder="4242 4242 4242 4242" maxlength="19"
+                       pattern="[0-9 ]{13,19}" title="Card number must be 13-19 digits" inputmode="numeric">
                 <div class="grid grid-2">
-                    <div><label>Expiry</label><input type="text" placeholder="MM/YY" maxlength="5"></div>
-                    <div><label>CVV</label><input type="text" placeholder="123" maxlength="4"></div>
+                    <div><label>Expiry</label><input type="text" class="card-input" placeholder="MM/YY" maxlength="5"
+                           pattern="(0[1-9]|1[0-2])/[0-9]{2}" title="Expiry must be in MM/YY format"></div>
+                    <div><label>CVV</label><input type="text" class="card-input" placeholder="123" maxlength="4"
+                           pattern="[0-9]{3,4}" title="CVV must be 3 or 4 digits" inputmode="numeric"></div>
                 </div>
                 <p class="form-hint">This is a student-project payment simulation - no real card
                     processor is contacted. The payment is simply recorded internally, consistent
@@ -35,5 +40,17 @@
     </div>
 </div>
 <div th:replace="~{common/footer :: footer}"></div>
+<script>
+    // Card details are only required (and validated) when paying by card.
+    function toggleCardFields() {
+        const isCard = document.getElementById('paymentMethod').value === 'Card';
+        document.getElementById('cardFields').style.display = isCard ? 'block' : 'none';
+        document.querySelectorAll('.card-input').forEach(function (input) {
+            input.required = isCard;
+            input.disabled = !isCard;
+        });
+    }
+    toggleCardFields();
+</script>
 </body>
 </html>

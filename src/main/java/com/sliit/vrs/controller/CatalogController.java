@@ -69,8 +69,15 @@ public class CatalogController {
         try {
             LocalDate startDate = LocalDate.parse(start);
             LocalDate endDate = LocalDate.parse(end);
+            if (startDate.isBefore(LocalDate.now())) {
+                return Map.of("available", false, "message", "Pickup date cannot be before today.");
+            }
             if (!endDate.isAfter(startDate)) {
                 return Map.of("available", false, "message", "Return date must be after pickup date.");
+            }
+            if (startDate.plusDays(ReservationService.MAX_RENTAL_DAYS).isBefore(endDate)) {
+                return Map.of("available", false,
+                        "message", "A single booking cannot be longer than " + ReservationService.MAX_RENTAL_DAYS + " days.");
             }
             boolean available = reservationService.isVehicleAvailable(id, startDate, endDate);
             return Map.of("available", available,

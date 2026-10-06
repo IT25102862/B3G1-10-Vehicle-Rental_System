@@ -7,21 +7,23 @@
 <div class="container">
     <div class="card">
         <h1>Schedule Maintenance</h1>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <form th:action="@{/maintenance/save}" th:object="${record}" method="post">
             <label>Vehicle</label>
             <select th:field="*{vehicle}" required>
                 <option th:each="v : ${vehicles}" th:value="${v.vehicleId}" th:text="${v.registrationNo + ' - ' + v.brand + ' ' + v.model}"></option>
             </select>
             <label>Maintenance Type</label>
-            <input type="text" th:field="*{maintenanceType}" placeholder="Oil change, Tire rotation, Brake check..." required>
+            <input type="text" th:field="*{maintenanceType}" placeholder="Oil change, Tire rotation, Brake check..." required maxlength="100">
             <label>Description</label>
-            <textarea th:field="*{description}" rows="3"></textarea>
+            <textarea th:field="*{description}" rows="3" maxlength="255"></textarea>
             <label>Scheduled Date</label>
-            <input type="date" th:field="*{scheduledDate}" required>
+            <input type="date" th:field="*{scheduledDate}" required th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
             <label>Estimated Cost (Rs.)</label>
-            <input type="number" step="0.01" th:field="*{cost}">
+            <input type="number" step="0.01" th:field="*{cost}" min="0" max="10000000">
             <label>Technician</label>
             <select th:field="*{technician}">
+                <option value="">-- Not assigned yet --</option>
                 <option th:each="t : ${technicians}" th:value="${t.employeeId}" th:text="${t.name}"></option>
             </select>
             <button type="submit" class="btn">Schedule</button>

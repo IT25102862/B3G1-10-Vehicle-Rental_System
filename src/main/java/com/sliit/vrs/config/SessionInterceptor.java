@@ -21,7 +21,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class SessionInterceptor implements HandlerInterceptor {
 
     private static final String[] STAFF_ONLY_PREFIXES = {
-            "/admin", "/vehicles", "/reservations", "/returns", "/maintenance", "/drivers"
+            "/admin", "/vehicles", "/reservations", "/returns", "/maintenance", "/drivers",
+            "/fuel"   // customers must not be able to change fuel prices
     };
     private static final String[] CUSTOMER_ONLY_PREFIXES = {
             "/my-bookings", "/profile", "/book"

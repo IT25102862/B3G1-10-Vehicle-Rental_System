@@ -7,6 +7,7 @@
 <div class="container">
     <div class="card">
         <h1>Assign a Driver</h1>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <form th:action="@{/drivers/save}" th:object="${assignment}" method="post">
             <label>Reservation</label>
             <select th:field="*{reservation}" required>

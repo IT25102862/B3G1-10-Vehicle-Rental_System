@@ -15,20 +15,23 @@
             <img th:if="${user.profileImageUrl != null}" th:src="@{${user.profileImageUrl}}"
                  style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:14px;">
 
+            <p th:if="${error}" class="error" th:text="${error}"></p>
+
             <form th:action="@{/profile/update}" th:object="${user}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:field="*{userId}">
                 <label>Full Name</label>
-                <input type="text" th:field="*{fullName}" required>
+                <input type="text" th:field="*{fullName}" required maxlength="100">
                 <label>Email (cannot be changed)</label>
                 <input type="email" th:value="*{email}" disabled>
                 <label>Phone Number</label>
-                <input type="text" th:field="*{phoneNumber}">
+                <input type="tel" th:field="*{phoneNumber}" maxlength="15" pattern="(0[0-9]{9}|\+94[0-9]{9})" title="e.g. 0771234567 or +94771234567">
                 <label>Address</label>
-                <textarea th:field="*{address}" rows="2"></textarea>
+                <textarea th:field="*{address}" rows="2" maxlength="255"></textarea>
                 <label>Driving Licence No.</label>
-                <input type="text" th:field="*{drivingLicenceNo}">
+                <input type="text" th:field="*{drivingLicenceNo}" maxlength="15"
+                       pattern="[A-Za-z0-9 ]{5,15}" title="5-15 letters or numbers, e.g. B1234567">
                 <label>Profile Picture</label>
-                <input type="file" name="profileImage" accept="image/*">
+                <input type="file" name="profileImage" accept=".jpg,.jpeg,.png,.gif,.webp">
 
                 <button type="submit" class="btn btn-block">Save Changes</button>
             </form>

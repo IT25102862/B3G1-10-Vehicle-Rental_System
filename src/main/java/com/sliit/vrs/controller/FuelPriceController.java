@@ -5,6 +5,7 @@ import com.sliit.vrs.service.FuelPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -30,7 +31,12 @@ public class FuelPriceController {
 
     // Create
     @PostMapping("/save")
-    public String saveFuelPrice(@ModelAttribute FuelPrice fuelPrice, Model model) {
+    public String saveFuelPrice(@ModelAttribute FuelPrice fuelPrice, BindingResult bindingResult, Model model) {
+        // e.g. an empty or non-numeric price cannot be converted to a number
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "Please enter a valid fuel type and price.");
+            return "fuel/fuel-form";
+        }
         try {
             fuelPriceService.saveFuelPrice(fuelPrice);
             return "redirect:/fuel";
@@ -68,8 +74,13 @@ public class FuelPriceController {
     @PostMapping("/update/{id}")
     public String updateFuelPrice(
             @PathVariable Long id,
-            @ModelAttribute FuelPrice fuelPrice, Model model) {
+            @ModelAttribute FuelPrice fuelPrice, BindingResult bindingResult, Model model) {
 
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "Please enter a valid fuel type and price.");
+            fuelPrice.setFuelPriceId(id);
+            return "fuel/fuel-form";
+        }
         try {
             fuelPriceService.updateFuelPrice(id, fuelPrice);
             return "redirect:/fuel";

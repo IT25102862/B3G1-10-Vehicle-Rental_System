@@ -8,6 +8,7 @@
     <div class="card">
         <h1>Driver Allocation</h1>
         <a class="btn" th:href="@{/drivers/add}">+ Assign Driver</a>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <table>
             <tr><th>ID</th><th>Reservation</th><th>Driver</th><th>Assigned Date</th><th>Status</th><th>Actions</th></tr>
             <tr th:each="a : ${assignments}">
@@ -18,7 +19,7 @@
                 <td><span class="status-badge" th:classappend="'status-' + ${a.status}" th:text="${a.status}"></span></td>
                 <td>
                     <a class="btn btn-small" th:href="@{/drivers/complete/{id}(id=${a.assignmentId})}"
-                       th:if="${a.status.name() != 'COMPLETED'}">Complete</a>
+                       th:if="${a.status.name() == 'ASSIGNED' or a.status.name() == 'ON_TRIP'}">Complete</a>
                 </td>
             </tr>
         </table>

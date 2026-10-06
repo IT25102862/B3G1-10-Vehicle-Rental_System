@@ -40,9 +40,10 @@
 
             <div class="mt-2">
                 <label>Pickup Date</label>
-                <input type="date" id="startDate">
+                <input type="date" id="startDate" th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}"
+                       onchange="document.getElementById('endDate').min = this.value">
                 <label>Return Date</label>
-                <input type="date" id="endDate">
+                <input type="date" id="endDate" th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
                 <button type="button" class="btn btn-secondary btn-block" onclick="checkAvailability()">Check Availability</button>
                 <div id="availabilityResult"></div>
             </div>

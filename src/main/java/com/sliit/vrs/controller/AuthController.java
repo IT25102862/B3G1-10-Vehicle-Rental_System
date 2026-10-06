@@ -3,6 +3,7 @@ package com.sliit.vrs.controller;
 import com.sliit.vrs.entity.Role;
 import com.sliit.vrs.entity.User;
 import com.sliit.vrs.service.AuthService;
+import com.sliit.vrs.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,15 +35,15 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String fullName,
-                            @RequestParam String email,
-                            @RequestParam String password,
+    public String register(@RequestParam(required = false) String fullName,
+                            @RequestParam(required = false) String email,
+                            @RequestParam(required = false) String password,
                             @RequestParam(required = false) String confirmPassword,
-                            @RequestParam String phone,
-                            @RequestParam Role role,
+                            @RequestParam(required = false) String phone,
+                            @RequestParam(required = false) Role role,
                             Model model) {
 
-        String error = validateRegistration(fullName, email, password, confirmPassword);
+        String error = validateRegistration(fullName, email, password, confirmPassword, phone, role);
         if (error != null) {
             model.addAttribute("error", error);
             model.addAttribute("roles", Role.values());
@@ -59,11 +60,17 @@ public class AuthController {
         return "redirect:/login?registered=true";
     }
 
-    private String validateRegistration(String fullName, String email, String password, String confirmPassword) {
+    private String validateRegistration(String fullName, String email, String password,
+                                        String confirmPassword, String phone, Role role) {
         if (fullName == null || fullName.isBlank()) return "Full name is required.";
-        if (email == null || !email.matches("^[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}$")) return "Enter a valid email address.";
+        if (!UserService.isValidFullName(fullName)) return "Full name must be 2-100 characters and contain only letters, spaces, dots, apostrophes or hyphens.";
+        if (email == null || email.trim().length() > 100
+                || !email.trim().matches("^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)*\\.[a-zA-Z]{2,}$")) return "Enter a valid email address.";
         if (password == null || password.length() < 6) return "Password must be at least 6 characters long.";
+        if (password.length() > 64) return "Password must be at most 64 characters long.";
         if (confirmPassword != null && !password.equals(confirmPassword)) return "Passwords do not match.";
+        if (phone != null && !phone.isBlank() && !UserService.isValidPhone(phone)) return "Enter a valid phone number, e.g. 0771234567 or +94771234567.";
+        if (role == null) return "Please select an account type.";
         return null;
     }
 

@@ -7,16 +7,21 @@
 <div class="container">
     <div class="card">
         <h1>Damage Assessment - Return #<span th:text="${vehicleReturn.returnId}"></span></h1>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <form th:action="@{/returns/assess/save}" th:object="${assessment}" method="post">
             <input type="hidden" name="vehicleReturn" th:value="${vehicleReturn.returnId}">
             <label>Assessment Date</label>
-            <input type="date" th:field="*{assessmentDate}" required>
+            <input type="date" th:field="*{assessmentDate}" required
+                   th:min="${vehicleReturn.returnDate}" th:max="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
             <label>Overall Condition</label>
-            <input type="text" th:field="*{overallCondition}" placeholder="Good / Fair / Poor">
+            <select th:field="*{overallCondition}" required>
+                <option value="">-- Select condition --</option>
+                <option th:each="c : ${conditions}" th:value="${c}" th:text="${c}"></option>
+            </select>
             <label>Estimated Repair Cost (Rs.)</label>
-            <input type="number" step="0.01" th:field="*{estimatedRepairCost}">
+            <input type="number" step="0.01" th:field="*{estimatedRepairCost}" min="0" max="10000000">
             <label>Assessor Remark</label>
-            <textarea th:field="*{assessorRemark}" rows="3"></textarea>
+            <textarea th:field="*{assessorRemark}" rows="3" maxlength="255"></textarea>
             <button type="submit" class="btn">Save Assessment</button>
         </form>
     </div>

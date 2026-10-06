@@ -11,6 +11,7 @@
             <h1>Vehicle Fleet</h1>
             <a class="btn" th:href="@{/vehicles/add}">+ Add Vehicle</a>
         </div>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <table>
             <tr><th>Photo</th><th>Reg No</th><th>Brand/Model</th><th>Category</th><th>Daily Rate</th><th>Status</th><th>Actions</th></tr>
             <tr th:each="v : ${vehicles}">

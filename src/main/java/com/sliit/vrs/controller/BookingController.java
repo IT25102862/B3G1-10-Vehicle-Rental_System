@@ -68,33 +68,63 @@ public class BookingController {
 
     // Step 3: booking summary before payment
     @GetMapping("/confirmation/{id}")
-    public String showConfirmation(@PathVariable Long id, Model model) {
-        model.addAttribute("reservation", reservationService.getReservationById(id));
+    public String showConfirmation(@PathVariable Long id, HttpSession session, Model model) {
+        model.addAttribute("reservation", getOwnReservation(id, session));
         return "booking/confirmation";
     }
 
     // Step 4: payment form
     @GetMapping("/payment/{id}")
-    public String showPaymentForm(@PathVariable Long id, Model model) {
-        model.addAttribute("reservation", reservationService.getReservationById(id));
+    public String showPaymentForm(@PathVariable Long id, HttpSession session, Model model) {
+        Reservation reservation = getOwnReservation(id, session);
+        // Already paid -> go straight to the receipt instead of paying twice.
+        if (paymentService.isPaid(reservation)) {
+            return "redirect:/book/receipt/" + id;
+        }
+        model.addAttribute("reservation", reservation);
         return "booking/payment";
     }
 
     // Step 5: process payment -> confirm booking -> show receipt
     @PostMapping("/payment/{id}")
-    public String processPayment(@PathVariable Long id, @RequestParam String method) {
-        Reservation reservation = reservationService.getReservationById(id);
-        paymentService.recordPayment(reservation, method);
-        // A completed online payment confirms the booking immediately,
-        // matching a real-world rental site's checkout flow.
-        reservationService.updateStatus(id, Reservation.ReservationStatus.CONFIRMED);
+    public String processPayment(@PathVariable Long id,
+                                 @RequestParam(required = false) String method,
+                                 HttpSession session,
+                                 Model model) {
+        Reservation reservation = getOwnReservation(id, session);
+        try {
+            paymentService.recordPayment(reservation, method);
+            // A completed online payment confirms the booking immediately,
+            // matching a real-world rental site's checkout flow. (If staff
+            // already confirmed it, there is nothing more to change.)
+            if (reservation.getStatus() == Reservation.ReservationStatus.PENDING_APPROVAL) {
+                reservationService.updateStatus(id, Reservation.ReservationStatus.CONFIRMED);
+            }
+        } catch (RuntimeException ex) {
+            model.addAttribute("error", ex.getMessage());
+            model.addAttribute("reservation", reservation);
+            return "booking/payment";
+        }
         return "redirect:/book/receipt/" + id;
     }
 
     // Step 6: final receipt / "booking confirmed" page
     @GetMapping("/receipt/{id}")
-    public String showReceipt(@PathVariable Long id, Model model) {
-        model.addAttribute("reservation", reservationService.getReservationById(id));
+    public String showReceipt(@PathVariable Long id, HttpSession session, Model model) {
+        model.addAttribute("reservation", getOwnReservation(id, session));
         return "booking/receipt";
+    }
+
+    // Loads a reservation and makes sure it belongs to the logged-in customer.
+    // Without this, a customer could change the number in the URL and view
+    // (or pay for) someone else's booking.
+    private Reservation getOwnReservation(Long id, HttpSession session) {
+        Reservation reservation = reservationService.getReservationById(id);
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null || reservation.getCustomer() == null
+                || !reservation.getCustomer().getUserId().equals(loggedInUser.getUserId())) {
+            throw new IllegalArgumentException("You can only view your own bookings.");
+        }
+        return reservation;
     }
 }

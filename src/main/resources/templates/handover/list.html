@@ -8,6 +8,7 @@
     <div class="card">
         <h1>Vehicle Handover, Return &amp; Damage Assessment</h1>
         <a class="btn" th:href="@{/returns/add}">+ Record Return</a>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <table>
             <tr><th>ID</th><th>Reservation</th><th>Return Date</th><th>Mileage</th><th>Condition</th><th>Actions</th></tr>
             <tr th:each="r : ${returns}">

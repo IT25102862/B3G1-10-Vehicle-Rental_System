@@ -17,7 +17,8 @@
             <div class="grid grid-2">
                 <div>
                     <label>Pickup Date</label>
-                    <input type="date" th:field="*{startDate}" required>
+                    <input type="date" th:field="*{startDate}" required th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}"
+                           onchange="document.getElementById('endDate').min = this.value">
                 </div>
                 <div>
                     <label>Pickup Time</label>
@@ -27,7 +28,7 @@
             <div class="grid grid-2">
                 <div>
                     <label>Return Date</label>
-                    <input type="date" th:field="*{endDate}" required>
+                    <input type="date" th:field="*{endDate}" required th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
                 </div>
                 <div>
                     <label>Return Time</label>
@@ -35,11 +36,11 @@
                 </div>
             </div>
             <label>Pickup Location</label>
-            <input type="text" th:field="*{pickupLocation}" placeholder="e.g. Colombo Main Branch" required>
+            <input type="text" th:field="*{pickupLocation}" placeholder="e.g. Colombo Main Branch" required maxlength="255">
             <label>Drop-off Location</label>
-            <input type="text" th:field="*{dropoffLocation}" placeholder="Leave blank if same as pickup">
+            <input type="text" th:field="*{dropoffLocation}" placeholder="Leave blank if same as pickup" maxlength="255">
             <label>Special Requests (optional)</label>
-            <textarea th:field="*{notes}" rows="3" placeholder="Child seat, GPS, extra driver..."></textarea>
+            <textarea th:field="*{notes}" rows="3" placeholder="Child seat, GPS, extra driver..." maxlength="500"></textarea>
 
             <button type="submit" class="btn btn-block">Continue to Confirmation</button>
         </form>

@@ -30,10 +30,25 @@ public class ProfileController {
     @PostMapping("/update")
     public String updateProfile(@ModelAttribute User formUser,
                                  @RequestParam(required = false) MultipartFile profileImage,
-                                 HttpSession session) {
-        User updated = userService.updateProfile(formUser.getUserId(), formUser, profileImage);
-        // Refresh the session copy so the navbar/dashboard show the new name immediately.
-        session.setAttribute("loggedInUser", updated);
+                                 HttpSession session,
+                                 Model model) {
+        // Always update the LOGGED-IN user's own profile. The hidden userId in
+        // the form could be changed by the user to edit someone else's account.
+        User current = (User) session.getAttribute("loggedInUser");
+        try {
+            User updated = userService.updateProfile(current.getUserId(), formUser, profileImage);
+            // Refresh the session copy so the navbar/dashboard show the new name immediately.
+            session.setAttribute("loggedInUser", updated);
+        } catch (RuntimeException ex) {
+            // Show the error and keep what the user typed (email comes from the DB).
+            User fresh = userService.getById(current.getUserId());
+            formUser.setUserId(fresh.getUserId());
+            formUser.setEmail(fresh.getEmail());
+            formUser.setProfileImageUrl(fresh.getProfileImageUrl());
+            model.addAttribute("error", ex.getMessage());
+            model.addAttribute("user", formUser);
+            return "customer/profile";
+        }
         return "redirect:/profile?updated=true";
     }
 }

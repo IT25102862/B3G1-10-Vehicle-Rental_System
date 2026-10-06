@@ -21,7 +21,7 @@
 
         <!-- Error Message -->
         <div th:if="${errorMessage}"
-             class="error-message"
+             class="error error-message"
              th:text="${errorMessage}">
         </div>
 
@@ -31,7 +31,7 @@
 
             <label>Fuel Type</label>
 
-            <select th:field="*{fuelType}">
+            <select th:field="*{fuelType}" required>
                 <option value="PETROL">Petrol</option>
                 <option value="DIESEL">Diesel</option>
                 <option value="ELECTRIC">Electric</option>
@@ -42,6 +42,8 @@
             <input type="number"
                    step="0.01"
                    th:field="*{price}"
+                   min="0.01"
+                   max="10000"
                    required>
 
             <button type="submit" class="btn">

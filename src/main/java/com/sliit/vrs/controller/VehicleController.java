@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.dao.DataIntegrityViolationException;
 
 
 @Controller
@@ -54,14 +56,25 @@ public class VehicleController {
             return "vehicle/form";
         }
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String imageUrl = fileStorageService.store(imageFile, "vehicles");
-            vehicle.setImageUrl(imageUrl);
-        } else if (vehicle.getVehicleId() != null) {
-            // Editing an existing vehicle without choosing a new photo:
-            // keep the photo it already had instead of wiping it out.
-            Vehicle existing = vehicleService.getVehicleById(vehicle.getVehicleId());
-            vehicle.setImageUrl(existing.getImageUrl());
+        try {
+            // Validate the typed-in values first, so an invalid form never
+            // leaves an orphan photo file behind in the uploads folder.
+            vehicleService.validateVehicle(vehicle);
+
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String imageUrl = fileStorageService.store(imageFile, "vehicles");
+                vehicle.setImageUrl(imageUrl);
+            } else if (vehicle.getVehicleId() != null) {
+                // Editing an existing vehicle without choosing a new photo:
+                // keep the photo it already had instead of wiping it out.
+                Vehicle existing = vehicleService.getVehicleById(vehicle.getVehicleId());
+                vehicle.setImageUrl(existing.getImageUrl());
+            }
+        } catch (RuntimeException ex) {
+            model.addAttribute("error", ex.getMessage());
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("statuses", Vehicle.AvailabilityStatus.values());
+            return "vehicle/form";
         }
 
         if (vehicle.getAvailabilityStatus() == null) {
@@ -83,8 +96,16 @@ public class VehicleController {
 
     // DELETE
     @GetMapping("/delete/{id}")
-    public String deleteVehicle(@PathVariable Long id) {
-        vehicleService.deleteVehicle(id);
+    public String deleteVehicle(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            vehicleService.deleteVehicle(id);
+        } catch (DataIntegrityViolationException ex) {
+            // The vehicle is still linked to bookings / maintenance records,
+            // so the database refuses to delete it. Show a message instead of crashing.
+            redirectAttributes.addFlashAttribute("error",
+                    "This vehicle cannot be deleted because it has booking or maintenance history. "
+                    + "Change its status to UNDER_MAINTENANCE instead.");
+        }
         return "redirect:/vehicles";
     }
 }

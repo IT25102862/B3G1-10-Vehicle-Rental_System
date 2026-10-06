@@ -13,25 +13,27 @@
             <p th:if="${error}" class="error" th:text="${error}"></p>
             <form th:action="@{/register}" method="post">
                 <label>Full Name</label>
-                <input type="text" name="fullName" required>
+                <input type="text" name="fullName" required maxlength="100" th:value="${param.fullName}">
                 <label>Email</label>
-                <input type="email" name="email" required>
+                <input type="email" name="email" required maxlength="100" th:value="${param.email}">
                 <div class="grid grid-2">
                     <div>
                         <label>Password</label>
-                        <input type="password" name="password" required minlength="6">
+                        <input type="password" name="password" required minlength="6" maxlength="64">
                     </div>
                     <div>
                         <label>Confirm Password</label>
-                        <input type="password" name="confirmPassword" required minlength="6">
+                        <input type="password" name="confirmPassword" required minlength="6" maxlength="64">
                     </div>
                 </div>
                 <p class="form-hint">At least 6 characters.</p>
                 <label>Phone Number</label>
-                <input type="text" name="phone">
+                <input type="tel" name="phone" maxlength="15" th:value="${param.phone}"
+                       pattern="(0[0-9]{9}|\+94[0-9]{9})" title="e.g. 0771234567 or +94771234567">
                 <label>Account Type</label>
-                <select name="role">
-                    <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+                <select name="role" required>
+                    <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"
+                            th:selected="${param.role != null and param.role[0] == r.name()}"></option>
                 </select>
                 <p class="form-hint">Choose <b>CUSTOMER</b> unless you're a staff member setting up a test account for a module demo.</p>
                 <button type="submit" class="btn btn-block">Create Account</button>

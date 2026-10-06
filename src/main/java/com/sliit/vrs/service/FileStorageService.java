@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 // Shared utility service: handles saving uploaded vehicle photos and
@@ -21,6 +22,8 @@ public class FileStorageService {
     // Folder on disk where files are actually stored, e.g. "uploads/vehicles"
     @Value("${app.upload.dir:uploads}")
     private String uploadRootDir;
+
+    private static final List<String> ALLOWED_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".gif", ".webp");
 
     /**
      * Saves the file under uploadRootDir/subFolder/ with a random file name
@@ -39,7 +42,14 @@ public class FileStorageService {
             String original = file.getOriginalFilename();
             String extension = "";
             if (original != null && original.contains(".")) {
-                extension = original.substring(original.lastIndexOf('.'));
+                extension = original.substring(original.lastIndexOf('.')).toLowerCase();
+            }
+            // Only accept real image files. Anything else (e.g. .html or .exe)
+            // would be saved and then served publicly from /uploads/**.
+            String contentType = file.getContentType();
+            if (!ALLOWED_EXTENSIONS.contains(extension)
+                    || contentType == null || !contentType.toLowerCase().startsWith("image/")) {
+                throw new IllegalArgumentException("Only image files (JPG, JPEG, PNG, GIF, WEBP) can be uploaded.");
             }
             String newFileName = UUID.randomUUID() + extension;
 

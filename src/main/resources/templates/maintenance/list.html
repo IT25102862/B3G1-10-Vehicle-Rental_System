@@ -8,6 +8,7 @@
     <div class="card">
         <h1>Maintenance Records</h1>
         <a class="btn" th:href="@{/maintenance/add}">+ Schedule Maintenance</a>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <table>
             <tr><th>ID</th><th>Vehicle</th><th>Type</th><th>Scheduled Date</th><th>Status</th><th>Actions</th></tr>
             <tr th:each="m : ${records}">
@@ -21,7 +22,9 @@
                        th:if="${m.status.name() == 'SCHEDULED'}">Start Service</a>
                     <a class="btn btn-small" th:href="@{/maintenance/complete/{id}(id=${m.maintenanceId})}"
                        th:if="${m.status.name() != 'COMPLETED'}">Complete</a>
-                    <a class="btn btn-small btn-danger" th:href="@{/maintenance/cancel/{id}(id=${m.maintenanceId})}">Cancel</a>
+                    <a class="btn btn-small btn-danger" th:href="@{/maintenance/cancel/{id}(id=${m.maintenanceId})}"
+                       th:if="${m.status.name() != 'COMPLETED'}"
+                       onclick="return confirm('Cancel this maintenance job?');">Cancel</a>
                 </td>
             </tr>
         </table>

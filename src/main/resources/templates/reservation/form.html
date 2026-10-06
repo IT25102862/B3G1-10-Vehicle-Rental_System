@@ -17,13 +17,14 @@
                         th:text="${v.brand + ' ' + v.model + ' (' + v.registrationNo + ')'}"></option>
             </select>
             <label>Pickup Location</label>
-            <input type="text" th:field="*{pickupLocation}" required>
+            <input type="text" th:field="*{pickupLocation}" required maxlength="255">
             <div class="grid grid-2">
-                <div><label>Start Date</label><input type="date" th:field="*{startDate}" required></div>
+                <div><label>Start Date</label><input type="date" th:field="*{startDate}" required th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}"
+                    onchange="document.getElementById('endDate').min = this.value"></div>
                 <div><label>Pickup Time</label><input type="time" th:field="*{pickupTime}"></div>
             </div>
             <div class="grid grid-2">
-                <div><label>End Date</label><input type="date" th:field="*{endDate}" required></div>
+                <div><label>End Date</label><input type="date" th:field="*{endDate}" required th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}"></div>
                 <div><label>Return Time</label><input type="time" th:field="*{returnTime}"></div>
             </div>
             <button type="submit" class="btn">Book Now</button>

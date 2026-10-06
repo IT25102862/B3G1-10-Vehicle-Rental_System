@@ -7,15 +7,16 @@
 <div class="container">
     <div class="card">
         <h1>Report an Emergency</h1>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <form th:action="@{/emergencies/save}" th:object="${request}" method="post">
             <label>Emergency Type</label>
-            <select th:field="*{emergencyType}">
+            <select th:field="*{emergencyType}" required>
                 <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
             </select>
             <label>Location</label>
-            <input type="text" th:field="*{location}" required>
+            <input type="text" th:field="*{location}" required maxlength="255">
             <label>Description</label>
-            <textarea th:field="*{description}" rows="4"></textarea>
+            <textarea th:field="*{description}" rows="4" required maxlength="255" placeholder="What happened? e.g. engine stopped, flat tyre"></textarea>
             <button type="submit" class="btn">Submit Request</button>
         </form>
     </div>

@@ -1,6 +1,7 @@
 package com.sliit.vrs.service;
 
 import com.sliit.vrs.entity.Employee;
+import com.sliit.vrs.entity.Role;
 import com.sliit.vrs.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,14 @@ public class EmployeeService {
     public Employee getById(Long id) {
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+    }
+
+    // Used to fill dropdowns with only the right kind of staff
+    // (e.g. only DRIVERs on the "Assign a Driver" form).
+    public List<Employee> getEmployeesByRole(Role role) {
+        return employeeRepository.findAll().stream()
+                .filter(e -> e.getRole() == role)
+                .toList();
     }
 
     public Employee save(Employee employee) {

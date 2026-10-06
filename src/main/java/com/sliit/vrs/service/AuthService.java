@@ -23,17 +23,20 @@ public class AuthService {
 
     public User register(String fullName, String email, String rawPassword, String phone, Role role) {
         User user = new User();
-        user.setFullName(fullName);
-        user.setEmail(email);
+        user.setFullName(fullName.trim());
+        user.setEmail(email.trim().toLowerCase());
         user.setPassword(passwordEncoder.encode(rawPassword));
-        user.setPhoneNumber(phone);
+        user.setPhoneNumber(phone == null || phone.isBlank() ? null : UserService.normalizePhone(phone));
         user.setRole(role);
         return userRepository.save(user);
     }
 
     // Returns the user if email + password match, otherwise empty.
     public Optional<User> login(String email, String rawPassword) {
-        Optional<User> found = userRepository.findByEmail(email);
+        if (email == null || rawPassword == null) {
+            return Optional.empty();
+        }
+        Optional<User> found = userRepository.findByEmailIgnoreCase(email.trim());
         if (found.isPresent() && passwordEncoder.matches(rawPassword, found.get().getPassword())) {
             return found;
         }
@@ -41,6 +44,6 @@ public class AuthService {
     }
 
     public boolean emailExists(String email) {
-        return userRepository.findByEmail(email).isPresent();
+        return email != null && userRepository.findByEmailIgnoreCase(email.trim()).isPresent();
     }
 }

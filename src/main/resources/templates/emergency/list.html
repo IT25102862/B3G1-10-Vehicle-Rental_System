@@ -8,6 +8,7 @@
     <div class="card">
         <h1>Emergency &amp; Roadside Assistance</h1>
         <a class="btn" th:href="@{/emergencies/add}">+ Report Emergency</a>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <table>
             <tr><th>ID</th><th>Customer</th><th>Type</th><th>Location</th><th>Status</th><th>Actions</th></tr>
             <tr th:each="e : ${requests}">
@@ -16,12 +17,16 @@
                 <td th:text="${e.emergencyType}"></td>
                 <td th:text="${e.location}"></td>
                 <td><span class="status-badge" th:classappend="'status-' + ${e.status}" th:text="${e.status}"></span></td>
-                <td>
-                    <form th:action="@{/emergencies/resolve/{id}(id=${e.emergencyRequestId})}" method="get" style="display:inline">
+                <td th:with="closed=${e.status.name() == 'RESOLVED' or e.status.name() == 'CANCELLED'}">
+                    <!-- Only staff can resolve; finished requests cannot be changed again -->
+                    <form th:if="${!closed and session.loggedInUser.role.name() != 'CUSTOMER'}"
+                          th:action="@{/emergencies/resolve/{id}(id=${e.emergencyRequestId})}" method="get" style="display:inline">
                         <input type="hidden" name="resolution" value="Assistance provided on site">
                         <button type="submit" class="btn btn-small">Resolve</button>
                     </form>
-                    <a class="btn btn-small btn-danger" th:href="@{/emergencies/cancel/{id}(id=${e.emergencyRequestId})}">Cancel</a>
+                    <a th:if="${!closed}" class="btn btn-small btn-danger"
+                       th:href="@{/emergencies/cancel/{id}(id=${e.emergencyRequestId})}"
+                       onclick="return confirm('Cancel this emergency request?');">Cancel</a>
                 </td>
             </tr>
         </table>

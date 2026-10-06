@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 // ===================================================================
 // MEMBER 2 (IT25102862 - Sandaruwan K.G.A.) - Booking & Reservation
@@ -63,28 +64,43 @@ public class ReservationController {
 
     // Operations Supervisor approves a pending booking
     @GetMapping("/confirm/{id}")
-    public String confirmReservation(@PathVariable Long id) {
-        reservationService.updateStatus(id, Reservation.ReservationStatus.CONFIRMED);
-        return "redirect:/reservations";
+    public String confirmReservation(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        return changeStatus(id, Reservation.ReservationStatus.CONFIRMED, redirectAttributes);
     }
 
     @GetMapping("/cancel/{id}")
-    public String cancelReservation(@PathVariable Long id) {
-        reservationService.cancelReservation(id);
-        return "redirect:/reservations";
+    public String cancelReservation(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        return changeStatus(id, Reservation.ReservationStatus.CANCELLED, redirectAttributes);
     }
 
     @GetMapping("/complete/{id}")
-    public String completeReservation(@PathVariable Long id) {
-        reservationService.updateStatus(id, Reservation.ReservationStatus.COMPLETED);
+    public String completeReservation(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        return changeStatus(id, Reservation.ReservationStatus.COMPLETED, redirectAttributes);
+    }
+
+    // Shared helper: an invalid status change (e.g. confirming a cancelled
+    // booking by typing the URL) shows a message on the list page instead of
+    // crashing the application.
+    private String changeStatus(Long id, Reservation.ReservationStatus status, RedirectAttributes redirectAttributes) {
+        try {
+            reservationService.updateStatus(id, status);
+        } catch (RuntimeException ex) {
+            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        }
         return "redirect:/reservations";
     }
 
     // Record a payment for a reservation (staff recording a cash/offline payment)
     @PostMapping("/pay/{id}")
-    public String recordPayment(@PathVariable Long id, @RequestParam String method) {
-        Reservation reservation = reservationService.getReservationById(id);
-        paymentService.recordPayment(reservation, method);
+    public String recordPayment(@PathVariable Long id,
+                                @RequestParam(required = false) String method,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            Reservation reservation = reservationService.getReservationById(id);
+            paymentService.recordPayment(reservation, method);
+        } catch (RuntimeException ex) {
+            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        }
         return "redirect:/reservations";
     }
 }

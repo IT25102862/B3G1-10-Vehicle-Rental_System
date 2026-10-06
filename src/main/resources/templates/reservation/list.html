@@ -11,6 +11,7 @@
             <h1>All Bookings</h1>
             <a class="btn" th:href="@{/reservations/add}">+ New Booking</a>
         </div>
+        <p th:if="${error}" class="error" th:text="${error}"></p>
         <table>
             <tr><th>ID</th><th>Customer</th><th>Vehicle</th><th>Pickup</th><th>Return</th><th>Total</th><th>Status</th><th>Actions</th></tr>
             <tr th:each="r : ${reservations}">

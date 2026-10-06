@@ -45,7 +45,7 @@ public class Vehicle {
     @JoinColumn(name = "category_id")
     private VehicleCategory category;
 
-    // ===== New fields for the professional catalog / detail page =====
+
 
     // Web path to the uploaded photo, e.g. "/uploads/vehicles/abc123.jpg".
     // Falls back to a placeholder image in the UI if this is null.

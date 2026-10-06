@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
-// MEMBER 2 - Booking & Reservation Management (Payment sub-feature).
-// No external payment gateway is used (per the proposal's "Zero External
-// Dependencies" constraint) - payments are simply recorded internally.
 @Service
 public class PaymentService {
 

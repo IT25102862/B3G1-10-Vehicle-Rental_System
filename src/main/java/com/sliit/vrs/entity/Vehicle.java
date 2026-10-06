@@ -7,9 +7,6 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-// MEMBER 1 - Vehicle Fleet Management
-// v2: added image + descriptive/spec fields so the public catalog and
-// detail page can show a proper vehicle card instead of a plain table row.
 @Entity
 @Table(name = "vehicles")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -38,11 +35,6 @@ public class Vehicle {
     @Column(nullable = false)
     private AvailabilityStatus availabilityStatus;
 
-    private Double fuelConsumption;
-
-    @Enumerated(EnumType.STRING)
-    private FuelType fuelType;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private VehicleCategory category;
@@ -57,6 +49,7 @@ public class Vehicle {
     private String description;
 
     private String transmission;   // Automatic / Manual
+    private String fuelType;       // Petrol / Diesel / Hybrid / Electric
     private Integer seats;
     private String color;
     private String location;       // pickup branch / city, used for filtering

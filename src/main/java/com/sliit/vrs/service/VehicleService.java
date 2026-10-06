@@ -9,15 +9,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// MEMBER 1 - Vehicle Fleet Management
-// Business logic lives here, separate from the controller (presentation)
-// and the repository (data access) - a simple 3-layer architecture.
-//
-// v2: added searchCatalog() for the public browsing page. It filters and
-// sorts in plain Java (streams) rather than a complex database query -
-// the fleet size in a demo/small business system is small enough that this
-// stays fast, and it is much easier for a student to read and explain than
-// a dynamic JPA Specification/Criteria query.
 @Service
 public class VehicleService {
 
@@ -58,17 +49,8 @@ public class VehicleService {
         vehicleRepository.save(v);
     }
 
-    /**
-     * Public catalog search/filter/sort.
-     * All parameters are optional (pass null / blank to ignore that filter).
-     *
-     * @param keyword     matches against brand or model (case-insensitive)
-     * @param categoryId  only vehicles in this category
-     * @param transmission "Automatic" / "Manual"
-     * @param fuelType     "Petrol" / "Diesel" / "Hybrid" / "Electric"
-     * @param minSeats     minimum seating capacity required
-     * @param sortBy       "price_asc", "price_desc", "year_desc", or default (name)
-     */
+
+
     public List<Vehicle> searchCatalog(String keyword, Long categoryId, String transmission,
                                         String fuelType, Integer minSeats, String sortBy) {
 
@@ -81,7 +63,7 @@ public class VehicleService {
                 .filter(v -> transmission == null || transmission.isBlank()
                         || transmission.equalsIgnoreCase(v.getTransmission()))
                 .filter(v -> fuelType == null || fuelType.isBlank()
-                        || fuelType.equalsIgnoreCase(String.valueOf(v.getFuelType())))
+                        || fuelType.equalsIgnoreCase(v.getFuelType()))
                 .filter(v -> minSeats == null || (v.getSeats() != null && v.getSeats() >= minSeats))
                 .collect(Collectors.toList());
 

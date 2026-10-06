@@ -51,33 +51,33 @@ public class VehicleService {
 
 
 
-    public List<Vehicle> searchCatalog(String keyword, Long categoryId, String transmission,
-                                        String fuelType, Integer minSeats, String sortBy) {
+public List<Vehicle> searchCatalog(String keyword, Long categoryId, String transmission,
+                                    String fuelType, Integer minSeats, String sortBy) {
 
-        List<Vehicle> results = getAvailableVehicles().stream()
-                .filter(v -> keyword == null || keyword.isBlank()
-                        || v.getBrand().toLowerCase().contains(keyword.toLowerCase())
-                        || v.getModel().toLowerCase().contains(keyword.toLowerCase()))
-                .filter(v -> categoryId == null
-                        || (v.getCategory() != null && v.getCategory().getCategoryId().equals(categoryId)))
-                .filter(v -> transmission == null || transmission.isBlank()
-                        || transmission.equalsIgnoreCase(v.getTransmission()))
-                .filter(v -> fuelType == null || fuelType.isBlank()
-                        || fuelType.equalsIgnoreCase(v.getFuelType()))
-                .filter(v -> minSeats == null || (v.getSeats() != null && v.getSeats() >= minSeats))
-                .collect(Collectors.toList());
+    List<Vehicle> results = getAvailableVehicles().stream()
+            .filter(v -> keyword == null || keyword.isBlank()
+                    || (v.getBrand() != null && v.getBrand().toLowerCase().contains(keyword.toLowerCase()))
+                    || (v.getModel() != null && v.getModel().toLowerCase().contains(keyword.toLowerCase())))
+            .filter(v -> categoryId == null
+                    || (v.getCategory() != null && v.getCategory().getCategoryId().equals(categoryId)))
+            .filter(v -> transmission == null || transmission.isBlank()
+                    || transmission.equalsIgnoreCase(v.getTransmission())) // transmission එක String නිසා .name() අවශ්‍ය නැත
+            .filter(v -> fuelType == null || fuelType.isBlank()
+                    || (v.getFuelType() != null && fuelType.equalsIgnoreCase(v.getFuelType().name()))) // fuelType එක Enum නිසා .name() යෙදිය යුතුය
+            .filter(v -> minSeats == null || (v.getSeats() != null && v.getSeats() >= minSeats))
+            .collect(Collectors.toList());
 
-        Comparator<Vehicle> comparator = Comparator.comparing(v -> v.getBrand() + v.getModel());
-        if ("price_asc".equals(sortBy)) {
-            comparator = Comparator.comparingDouble(this::rateOf);
-        } else if ("price_desc".equals(sortBy)) {
-            comparator = Comparator.comparingDouble(this::rateOf).reversed();
-        } else if ("year_desc".equals(sortBy)) {
-            comparator = Comparator.comparing((Vehicle v) -> v.getYear() == null ? 0 : v.getYear()).reversed();
-        }
-        results.sort(comparator);
-        return results;
+    Comparator<Vehicle> comparator = Comparator.comparing(v -> v.getBrand() + v.getModel());
+    if ("price_asc".equals(sortBy)) {
+        comparator = Comparator.comparingDouble(this::rateOf);
+    } else if ("price_desc".equals(sortBy)) {
+        comparator = Comparator.comparingDouble(this::rateOf).reversed();
+    } else if ("year_desc".equals(sortBy)) {
+        comparator = Comparator.comparing((Vehicle v) -> v.getYear() == null ? 0 : v.getYear()).reversed();
     }
+    results.sort(comparator);
+    return results;
+}
 
     private double rateOf(Vehicle v) {
         return v.getCategory() != null && v.getCategory().getBaseRate() != null

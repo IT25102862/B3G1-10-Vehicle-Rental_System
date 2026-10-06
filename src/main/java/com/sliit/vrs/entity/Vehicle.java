@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+
 @Entity
 @Table(name = "vehicles")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -35,11 +36,16 @@ public class Vehicle {
     @Column(nullable = false)
     private AvailabilityStatus availabilityStatus;
 
+    private Double fuelConsumption;
+
+    @Enumerated(EnumType.STRING)
+    private FuelType fuelType;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private VehicleCategory category;
 
-    // ===== New fields for the professional catalog / detail page =====
+
 
     // Web path to the uploaded photo, e.g. "/uploads/vehicles/abc123.jpg".
     // Falls back to a placeholder image in the UI if this is null.
@@ -49,7 +55,6 @@ public class Vehicle {
     private String description;
 
     private String transmission;   // Automatic / Manual
-    private String fuelType;       // Petrol / Diesel / Hybrid / Electric
     private Integer seats;
     private String color;
     private String location;       // pickup branch / city, used for filtering

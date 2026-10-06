@@ -70,18 +70,18 @@ public class VehicleService {
      * @param sortBy       "price_asc", "price_desc", "year_desc", or default (name)
      */
     public List<Vehicle> searchCatalog(String keyword, Long categoryId, String transmission,
-                                        String fuelType, Integer minSeats, String sortBy) {
+                                       String fuelType, Integer minSeats, String sortBy) {
 
         List<Vehicle> results = getAvailableVehicles().stream()
                 .filter(v -> keyword == null || keyword.isBlank()
-                        || v.getBrand().toLowerCase().contains(keyword.toLowerCase())
-                        || v.getModel().toLowerCase().contains(keyword.toLowerCase()))
+                        || (v.getBrand() != null && v.getBrand().toLowerCase().contains(keyword.toLowerCase()))
+                        || (v.getModel() != null && v.getModel().toLowerCase().contains(keyword.toLowerCase())))
                 .filter(v -> categoryId == null
                         || (v.getCategory() != null && v.getCategory().getCategoryId().equals(categoryId)))
                 .filter(v -> transmission == null || transmission.isBlank()
-                        || transmission.equalsIgnoreCase(v.getTransmission()))
+                        || transmission.equalsIgnoreCase(v.getTransmission())) // transmission එක String නිසා .name() අවශ්‍ය නැත
                 .filter(v -> fuelType == null || fuelType.isBlank()
-                        || fuelType.equalsIgnoreCase(String.valueOf(v.getFuelType())))
+                        || (v.getFuelType() != null && fuelType.equalsIgnoreCase(v.getFuelType().name()))) // fuelType එක Enum නිසා .name() යෙදිය යුතුය
                 .filter(v -> minSeats == null || (v.getSeats() != null && v.getSeats() >= minSeats))
                 .collect(Collectors.toList());
 

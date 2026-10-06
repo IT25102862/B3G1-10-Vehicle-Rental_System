@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-// Shared / minor function: User Registration & Authentication.
-// Built once in Phase 1 and reused by every module (login required
-// before booking, viewing fleet, reporting emergencies, etc.)
 @Service
 public class AuthService {
 

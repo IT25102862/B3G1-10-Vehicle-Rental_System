@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile - DriveEasy Rentals</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<div class="container mt-3">
+    <h1>My Profile</h1>
+    <div class="dash-layout mt-2">
+        <div th:replace="~{customer/sidebar :: sidebar('profile')}"></div>
+        <div class="card" style="max-width:560px;">
+            <p class="success" th:if="${param.updated}">Profile updated successfully.</p>
+
+            <img th:if="${user.profileImageUrl != null}" th:src="@{${user.profileImageUrl}}"
+                 style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:14px;">
+
+            <form th:action="@{/profile/update}" th:object="${user}" method="post" enctype="multipart/form-data">
+                <input type="hidden" th:field="*{userId}">
+                <label>Full Name</label>
+                <input type="text" th:field="*{fullName}" required>
+                <label>Email (cannot be changed)</label>
+                <input type="email" th:value="*{email}" disabled>
+                <label>Phone Number</label>
+                <input type="text" th:field="*{phoneNumber}">
+                <label>Address</label>
+                <textarea th:field="*{address}" rows="2"></textarea>
+                <label>Driving Licence No.</label>
+                <input type="text" th:field="*{drivingLicenceNo}">
+                <label>Profile Picture</label>
+                <input type="file" name="profileImage" accept="image/*">
+
+                <button type="submit" class="btn btn-block">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 
+// MEMBER 2 - Booking & Reservation Management (Payment sub-feature)
 @Entity
 @Table(name = "payments")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor

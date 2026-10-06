@@ -96,39 +96,6 @@ public class ReservationService {
         }
     }
 
-
-    // UPDATE - edit an existing booking's own fields (not just status).
-    // Staff use this to correct a customer's dates/location after creation.
-    public Reservation updateReservation(Long id, Reservation formData) {
-        Reservation existing = getReservationById(id);
-        existing.setStartDate(formData.getStartDate());
-        existing.setEndDate(formData.getEndDate());
-        existing.setPickupTime(formData.getPickupTime());
-        existing.setReturnTime(formData.getReturnTime());
-        existing.setPickupLocation(formData.getPickupLocation());
-        existing.setDropoffLocation(formData.getDropoffLocation());
-        existing.setNotes(formData.getNotes());
-
-        // Recalculate the total in case the dates changed
-        long days = ChronoUnit.DAYS.between(existing.getStartDate(), existing.getEndDate());
-        double rate = existing.getVehicle().getCategory() != null ? existing.getVehicle().getCategory().getBaseRate() : 0;
-        existing.setTotalAmount(days * rate);
-
-        return reservationRepository.save(existing);
-    }
-
-    // DELETE - permanently remove a reservation record (e.g. a duplicate
-    // or a mistaken entry). Different from cancelReservation(), which only
-    // changes the status and keeps the record for history.
-    public void deleteReservation(Long id) {
-        Reservation r = getReservationById(id);
-        // Free up the vehicle if this reservation had it locked.
-        if (r.getStatus() == Reservation.ReservationStatus.CONFIRMED) {
-            vehicleService.markAsAvailable(r.getVehicle().getVehicleId());
-        }
-        reservationRepository.delete(r);
-    }
-
     public void cancelReservation(Long id) {
         updateStatus(id, Reservation.ReservationStatus.CANCELLED);
     }

@@ -48,9 +48,9 @@ public class BookingController {
     // Step 2: submit dates -> validate availability -> create PENDING_APPROVAL booking
     @PostMapping("/{vehicleId}")
     public String submitBooking(@PathVariable Long vehicleId,
-                                @ModelAttribute Reservation reservation,
-                                HttpSession session,
-                                Model model) {
+                                 @ModelAttribute Reservation reservation,
+                                 HttpSession session,
+                                 Model model) {
         Vehicle vehicle = vehicleService.getVehicleById(vehicleId);
         reservation.setVehicle(vehicle);
         User loggedInUser = (User) session.getAttribute("loggedInUser");

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 
 // ===================================================================
-// MEMBER 6 (IT25100976 - Malgahamuduna R.P.D.S.) - Maintenance
+// MEMBER 6 (IT25100976 - Malagahamuduna R.P.D.S.) - Maintenance
 // Operations Management System (Maintenance & Driver Allocation)
 // ===================================================================
 @Entity

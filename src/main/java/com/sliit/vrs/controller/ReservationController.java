@@ -48,8 +48,8 @@ public class ReservationController {
 
     @PostMapping("/save")
     public String createReservation(@ModelAttribute Reservation reservation,
-                                    HttpSession session,
-                                    Model model) {
+                                     HttpSession session,
+                                     Model model) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         try {
             reservationService.createReservation(reservation, loggedInUser);
@@ -58,26 +58,6 @@ public class ReservationController {
             model.addAttribute("availableVehicles", vehicleService.getAvailableVehicles());
             return "reservation/form";
         }
-        return "redirect:/reservations";
-    }
-
-    // UPDATE - show pre-filled edit form (correct a booking's own fields)
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        model.addAttribute("reservation", reservationService.getReservationById(id));
-        return "reservation/edit-form";
-    }
-
-    @PostMapping("/update/{id}")
-    public String updateReservation(@PathVariable Long id, @ModelAttribute Reservation reservation) {
-        reservationService.updateReservation(id, reservation);
-        return "redirect:/reservations";
-    }
-
-    // DELETE - permanently remove a reservation record
-    @GetMapping("/delete/{id}")
-    public String deleteReservation(@PathVariable Long id) {
-        reservationService.deleteReservation(id);
         return "redirect:/reservations";
     }
 

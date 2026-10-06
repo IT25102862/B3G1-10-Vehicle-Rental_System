@@ -8,6 +8,14 @@ import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+// ===================================================================
+// MEMBER 2 (IT25102862 - Sandaruwan K.G.A.) - Booking & Reservation
+// Management (includes Payment, since Payment & Billing was not
+// assigned its own dedicated member in the proposal's "6 Major
+// Functions" section - see ASSUMPTIONS in README).
+// v2: added pickup/return TIME fields (not just dates) and a drop-off
+// location + notes field, to match a real-world rental checkout flow.
+// ===================================================================
 @Entity
 @Table(name = "reservations")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor

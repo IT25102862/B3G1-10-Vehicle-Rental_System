@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Vehicles - DriveEasy Rentals</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+
+<div class="container mt-3">
+    <div class="section-title" style="margin-bottom:24px;">
+        <h2>Browse Our Fleet</h2>
+        <p>Filter by type, transmission, fuel, or seating - then check live availability.</p>
+    </div>
+
+    <form th:action="@{/catalog}" method="get" class="card">
+        <div class="grid grid-4">
+            <div>
+                <label>Keyword</label>
+                <input type="text" name="keyword" th:value="${keyword}" placeholder="Brand or model">
+            </div>
+            <div>
+                <label>Vehicle Type</label>
+                <select name="categoryId">
+                    <option value="">Any type</option>
+                    <option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"
+                            th:selected="${categoryId != null and categoryId == c.categoryId}"></option>
+                </select>
+            </div>
+            <div>
+                <label>Transmission</label>
+                <select name="transmission">
+                    <option value="">Any</option>
+                    <option value="Automatic" th:selected="${transmission == 'Automatic'}">Automatic</option>
+                    <option value="Manual" th:selected="${transmission == 'Manual'}">Manual</option>
+                </select>
+            </div>
+            <div>
+                <label>Fuel Type</label>
+                <select name="fuelType">
+                    <option value="">Any</option>
+                    <option value="Petrol" th:selected="${fuelType == 'Petrol'}">Petrol</option>
+                    <option value="Diesel" th:selected="${fuelType == 'Diesel'}">Diesel</option>
+                    <option value="Hybrid" th:selected="${fuelType == 'Hybrid'}">Hybrid</option>
+                    <option value="Electric" th:selected="${fuelType == 'Electric'}">Electric</option>
+                </select>
+            </div>
+        </div>
+        <div class="grid grid-4 mt-1">
+            <div>
+                <label>Min. Seats</label>
+                <input type="number" name="minSeats" min="1" th:value="${minSeats}">
+            </div>
+            <div>
+                <label>Sort By</label>
+                <select name="sortBy">
+                    <option value="">Name (A-Z)</option>
+                    <option value="price_asc" th:selected="${sortBy == 'price_asc'}">Price: Low to High</option>
+                    <option value="price_desc" th:selected="${sortBy == 'price_desc'}">Price: High to Low</option>
+                    <option value="year_desc" th:selected="${sortBy == 'year_desc'}">Newest First</option>
+                </select>
+            </div>
+            <div style="align-self:end;">
+                <button type="submit" class="btn btn-block">Apply Filters</button>
+            </div>
+            <div style="align-self:end;">
+                <a th:href="@{/catalog}" class="btn btn-secondary btn-block">Clear Filters</a>
+            </div>
+        </div>
+    </form>
+
+    <p class="mt-2" th:text="${#lists.size(vehicles)} + ' vehicle(s) found'">0 vehicles found</p>
+
+    <div class="grid grid-3 mt-1">
+        <div class="vehicle-card" th:each="v : ${vehicles}">
+            <img class="thumb"
+                 th:src="${v.imageUrl != null} ? @{${v.imageUrl}} : 'https://placehold.co/500x300?text=' + ${v.brand}"
+                 alt="Vehicle photo">
+            <div class="body">
+                <span class="category-tag" th:text="${v.category?.categoryName}">Category</span>
+                <h3 th:text="${v.brand + ' ' + v.model}">Brand Model</h3>
+                <div class="specs">
+                    <span th:if="${v.seats}">&#128100; <span th:text="${v.seats}"></span></span>
+                    <span th:if="${v.transmission}" th:text="${v.transmission}"></span>
+                    <span th:if="${v.fuelType}" th:text="${v.fuelType}"></span>
+                    <span th:if="${v.year}" th:text="${v.year}"></span>
+                </div>
+                <div class="card-footer">
+                    <div class="price">
+                        Rs. <span th:text="${v.category != null ? #numbers.formatDecimal(v.category.baseRate,0,'COMMA',0,'POINT') : '-'}">0</span>
+                        <span>/ day</span>
+                    </div>
+                    <a th:href="@{/catalog/{id}(id=${v.vehicleId})}" class="btn btn-small">View &amp; Book</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-center mt-3" th:if="${#lists.isEmpty(vehicles)}">
+        No vehicles match your filters. Try clearing some filters above.
+    </p>
+</div>
+
+<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>
